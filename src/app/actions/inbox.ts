@@ -5,5 +5,5 @@ import { eq } from "drizzle-orm";
 
 export async function markAsRead(notifId: string) {
     const db = await createDB()
-    await db.update(notification).set({read: "true"}).where(eq(notification.id, notifId))
+    await db.update(notification).set({read: true}).where(eq(notification.id, notifId))
 }

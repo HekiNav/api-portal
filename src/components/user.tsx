@@ -2,8 +2,6 @@
 import { User } from "@/lib/definitions";
 import CopyItem from "./copy";
 import dayjs from "dayjs"
-import { useContext } from "react";
-import { UserContext } from "@/app/user-provider";
 
 export default function UserUI({ user, isCurrentUser = false }: { user: User, isCurrentUser?: boolean }) {
     return (

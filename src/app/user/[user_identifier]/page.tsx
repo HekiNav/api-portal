@@ -3,7 +3,6 @@
 import Toast from "@/components/toast"
 import UserUI from "@/components/user"
 import { getCurrentUser } from "@/lib/auth"
-import { Map } from "@/lib/definitions"
 import { getUser } from "@/lib/public"
 import { redirect } from "next/navigation"
 
@@ -20,8 +19,7 @@ export default async function UserPage({ params }: { params: Promise<{ user_iden
 
     return (
         <div>
-            <UserUI user={{ ...user, email: "", admin: user.admin, maps: user.maps && user.maps.map(m => ({...m, imageGeojsonAvailable: m.imageGeojsonAvailable == "true",
-            imageLocationBlurred: m.imageLocationBlurred == "true"})) as Map[] | undefined, sessions: [] }} isCurrentUser={currentUser?.id == user.id}></UserUI>
+            <UserUI user={user} isCurrentUser={currentUser?.id == user.id}></UserUI>
         </div>
     )
 }

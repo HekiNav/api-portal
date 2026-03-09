@@ -28,7 +28,9 @@ export async function sendNotification({ message, recipient, type, recipientEmai
         type: type,
         senderId: sender,
         message: message,
-        title: title
+        title: title,
+        creationTime: new Date(),
+        read: false
     })
     if (!email || !recipientEmail) return
     const resend = new Resend(process.env.RESEND_API_KEY)

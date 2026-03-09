@@ -19,7 +19,7 @@ export default function UserProvider({ user, children, notifs }: userProviderPro
     function updateNotifs() {
         if (!user) return
         getNotifications({ user: user?.id }).then(newNotifs => {
-            setNotifications(newNotifs.map(n => ({ ...n, read: n.read == "true" })))
+            setNotifications(newNotifs.map(n => ({ ...n, read: n.read == true })))
             setLastUpdateTime(Date.now())
         })
     }

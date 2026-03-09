@@ -59,7 +59,7 @@ export default function Login() {
               value={email}
               disabled={pending}
               onChange={(e) => setEmail(e.target.value)}
-              className="my-1 border-black border-3 p-1"
+              className="my-1 border-black border-3 p-1 accent-blue-800"
               onKeyDown={(e) => e.key == "Enter" && startTransition(() => action({ type: "send", email: email }))}
             />
             <div className="text-red-600">{errors?.email?.join(", ")}</div>
@@ -84,7 +84,7 @@ export default function Login() {
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
               disabled={pending}
-              className="my-2 border-black border-3 p-1"
+              className="my-2 border-black border-3 p-1 accent-blue-800"
               onKeyDown={(e) => e.key == "Enter" && startTransition(() => action({ type: "verify", email: email, otp: otp }))}
             />
             <div className="text-red-600">{errors?.otp?.join(", ")}</div>
@@ -108,7 +108,7 @@ export default function Login() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               disabled={pending}
-              className="my-2 border-black border-3 p-1"
+              className="my-2 border-black border-3 p-1 accent-blue-800"
             />
             <div className="text-red-600">{errors?.username?.join(", ")}</div>
             <Button

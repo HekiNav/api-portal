@@ -11,6 +11,9 @@
 		"nodejs_compat",
 		"global_fetch_strictly_public"
 	],
+	"dev": {
+		"host": "localhost"
+	},
 	"assets": {
 		"binding": "ASSETS",
 		"directory": ".open-next/assets"
@@ -27,11 +30,9 @@
 	"observability": {
 		"enabled": true
 	},
-	"d1_databases": [
-		{
-			"binding": "api_portal_db",
-			"database_name": "api_portal_db",
-			"database_id": "30c4734a-5125-4040-acdc-b95d876f6d11",
-		}
-	],
+	"d1_databases": [{
+		"database_id": "30c4734a-5125-4040-acdc-b95d876f6d11",
+		"binding": "api_portal_db",
+		"remote": true,
+	}]
 }

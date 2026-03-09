@@ -8,10 +8,7 @@ import Button from "@/components/button";
 import Modal from "@/components/modal";
 import { changeEmail, changeUsername, deleteUser } from "@/app/actions/user";
 import { useRouter } from "next/navigation";
-import { doServer, User } from "@/lib/definitions";
-import Icon from "@/components/icon";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import Link from "next/link";
+import { doServer } from "@/lib/definitions";
 
 export default function MyUserPage() {
     const user = useContext(UserContext)
@@ -52,7 +49,7 @@ export default function MyUserPage() {
                     name="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="my-1 border-black border-3 p-1 text-blue-800"
+                    className="my-1 border-black border-3 p-1 text-blue-800 accent-blue-800"
                     onKeyDown={(e) => e.key == "Enter"}
                 />
                 <Button className="ml-2 mb-4" onClick={() => user.email != email ? setModalState("email") : toast("You haven't changed anything!")}>Update</Button><br />
@@ -65,7 +62,7 @@ export default function MyUserPage() {
                     name="username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="my-1 border-black border-3 p-1 text-blue-800"
+                    className="my-1 border-black border-3 p-1 text-blue-800 accent-blue-800"
                     onKeyDown={(e) => e.key == "Enter"}
                 />
                 <Button className="ml-2 mb-4" onClick={() => user.name != username ? setModalState("username") : toast("You haven't changed anything!")}>Update</Button>
@@ -90,7 +87,7 @@ export default function MyUserPage() {
                 </>}
                 <input
                     onChange={(e) => setConfirmation(e.target.value)}
-                    className="my-1 border-black border-3 p-1 text-black"
+                    className="my-1 border-black border-3 p-1 text-black accent-blue-800"
                 />
                 <Button onClick={() => {
                     switch (modalState) {
