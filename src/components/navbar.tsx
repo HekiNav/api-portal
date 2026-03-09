@@ -15,7 +15,7 @@ export default function NavBar() {
         { url: "https://github.com/HekiNav/api-portal", item: (<span className="flex flex-row">GitHub<Icon className="ml-[0.125em]" size="sm" icon={faArrowUpRightFromSquare}></Icon></span>) },
 
     ]
-    if (user?.admin) items.splice(items.length-1, 0, { url: "/review", item: (<span className="text-red-600">Review</span>) })
+    if (user?.admin) items.splice(items.length-1, 0, { url: "/manage", item: (<span className="text-blue-600">Manage</span>) })
 
     return (
         <div className="shadow-lg/20 w-full flex flex-row justify-between p-2 items-center font-sans">
@@ -32,7 +32,7 @@ export default function NavBar() {
                 {user ?
                     <div className="flex flex-row flex-nowrap gap-2 items-center ">
                         <Link href="/user/me" className="h-full flex flex-col content-center">
-                            <IconItem icon={{ icon: faUser, title: user.admin ? "Admin user" : "Normal user", className: `${user.admin ? "text-red-600" : "text-blue-800"}` }}>{user.name || user.id}</IconItem>
+                            <IconItem icon={{ icon: faUser, title: user.admin ? "Admin user" : "Normal user", className: `${user.admin ? "text-blue-600" : "text-blue-800"}` }}>{user.name || user.id}</IconItem>
                         </Link>
                         <Link href="/inbox" className="h-full flex flex-col content-center">
                             <IconItem icon={{ icon: faInbox, className: notifications?.some(n => !n.read) ? `after:absolute after:bg-red-600 after:rounded-full after:p-1 after:-top-0.5 after:-left-0.5 relative` : ""}}>Inbox</IconItem>

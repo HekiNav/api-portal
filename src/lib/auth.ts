@@ -6,7 +6,6 @@ import { User } from "./definitions";
 
 export async function getCurrentUser(): Promise<User | null> {
   const db = await createDB()
-  console.log(db)
   const sessionId = (await cookies()).get("session")?.value
   if (!sessionId) return null;
 
@@ -14,5 +13,5 @@ export async function getCurrentUser(): Promise<User | null> {
     where: and(eq(session.id, sessionId), gt(session.expiresAt, new Date())), with: { user: true }
   })
 
-  return sessionData?.user || null
+  return sessionData?.user ? {...sessionData.user, lastSeen: sessionData.expiresAt} : null
 }

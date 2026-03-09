@@ -152,8 +152,6 @@ export async function login(state: OTPFormState, { type, email, otp, username }:
       message: `
       <h1>Welcome ${username}!</h1>
       <p>Here are some things you can do:</p>
-      <a href="/map/new"><button class="bg-blue-800 text-white cursor-pointer shadow-xl/20 p-2">Create a map</button></a>
-      <a href="/play/daily"><button class="bg-blue-800 text-white cursor-pointer shadow-xl/20 p-2">Attempt the daily challenge</button></a>
       <a href="/user/me"><button class="bg-blue-800 text-white cursor-pointer shadow-xl/20 p-2">View your profile</button></a>
                       
       `,

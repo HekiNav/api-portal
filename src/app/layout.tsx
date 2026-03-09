@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Karla, Share_Tech_Mono } from "next/font/google";
+import { Karla, Quicksand } from "next/font/google";
 import { Toaster } from "react-hot-toast"
 import "./globals.css";
 import NavBar from "@/components/navbar";
@@ -12,8 +12,8 @@ const karla = Karla({
 	subsets: ["latin"],
 });
 
-const shareTechMono = Share_Tech_Mono({
-	variable: "--font-share-tech-mono",
+const shareTechMono = Quicksand({
+	variable: "--font-mono",
 	subsets: ["latin"],
 	weight: "400"
 })

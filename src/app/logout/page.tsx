@@ -19,7 +19,7 @@ export default function Logout() {
       <Card cardTitle="Logout">
         <h1 className="text-xl mt-2 mb-6">Are you sure you want to log out?</h1>
         <div>
-          <Button className="bg-red-600 mr-2" onClick={() => {
+          <Button className="bg-blue-400! mr-2" onClick={() => {
             router.back()
           }}>Cancel</Button>
           <Button onClick={() => {
