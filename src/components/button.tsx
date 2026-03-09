@@ -8,11 +8,12 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 export default function Button(propsWithOnPress: ButtonProps) {
     const {onPress, ...props} = propsWithOnPress
     const red = props.className?.includes("bg-red-600")
+    const green = props.className?.includes("bg-green-600")
     return (<button
         {...{
             ...props,
             onClick: (e) => { if(props.onClick) props.onClick(e); if(onPress) onPress(e) },
-            onKeyDown: (e) => { if(props.onKeyDown) props.onKeyDown(e); if(e.key == "Enter" && onPress) onPress(e) }, className: `${red ? "active:bg-red-700":"active:bg-blue-700"} bg-blue-600 cursor-pointer rounded shadow-xl/20 p-2 ${props.disabled ? red ? "bg-red-700":"bg-blue-700" : ""} ${props.className}`
+            onKeyDown: (e) => { if(props.onKeyDown) props.onKeyDown(e); if(e.key == "Enter" && onPress) onPress(e) }, className: `${red ? "active:bg-red-700": green ? "active:bg-green-700" :"active:bg-blue-900"} bg-blue-800 cursor-pointer text-white shadow-xl/20 p-2 ${props.disabled ? red ? "bg-red-700":"bg-blue-800" : ""} ${props.className}`
         }}
     >
         {props.children}

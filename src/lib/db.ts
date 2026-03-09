@@ -11,7 +11,9 @@ let db: DrizzleD1Database<typeof schema> | null = null
 export async function createDB() {
   if (!db) {
     const { env } = await getCloudflareContext({ async: true })
+    console.log(env)
     db = drizzle((env as Env).api_portal_db, { schema })
   }
+  console.log(db)
   return db
 }

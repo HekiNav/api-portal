@@ -48,7 +48,7 @@ export default async function RootLayout({
 							</div>
 						</div>
 						<footer className="p-8 w-full">
-							<span className="text-blue-600 font-mono mr-2">Api key portal</span>	© Hekinav {new Date().getFullYear()}
+							<span className="text-blue-800 font-mono mr-2">Api key portal</span>	© Hekinav {new Date().getFullYear()}
 						</footer>
 					</div>
 				</UserProvider>

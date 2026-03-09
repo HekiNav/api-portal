@@ -12,8 +12,7 @@ export default function NavBar() {
     const [notifications] = useContext(NotificationContext)
 
     const items: {url: string, item: ReactNode}[] = [
-        { url: "/play", item: "Play" },
-        { url: "https://github.com/HekiNav/api-portal", item: (<span>GitHub<Icon icon={faArrowUpRightFromSquare}></Icon></span>) },
+        { url: "https://github.com/HekiNav/api-portal", item: (<span className="flex flex-row">GitHub<Icon className="ml-[0.125em]" size="sm" icon={faArrowUpRightFromSquare}></Icon></span>) },
 
     ]
     if (user?.admin) items.splice(items.length-1, 0, { url: "/review", item: (<span className="text-red-600">Review</span>) })
@@ -21,8 +20,8 @@ export default function NavBar() {
     return (
         <div className="shadow-lg/20 w-full flex flex-row justify-between p-2 items-center font-sans">
             <div className="flex flex-row w-full h-min font-medium">
-                <Link href="/" className="font-mono pr-4 text-blue-600">Hekinav API Portal</Link>
-                <div className="divide-x-2 divide-blue-600">
+                <Link href="/" className="font-mono pr-4 text-blue-800">Hekinav API Portal</Link>
+                <div className="divide-x-2 divide-blue-800 flex">
                     {...items.map(({ url, item },i) => (
                         <Link key={i} href={url} className="px-1">{item}</Link>
                     ))}
@@ -33,7 +32,7 @@ export default function NavBar() {
                 {user ?
                     <div className="flex flex-row flex-nowrap gap-2 items-center ">
                         <Link href="/user/me" className="h-full flex flex-col content-center">
-                            <IconItem icon={{ icon: faUser, title: user.admin ? "Admin user" : "Normal user", className: `${user.admin ? "text-red-600" : "text-blue-600"}` }}>{user.name || user.id}</IconItem>
+                            <IconItem icon={{ icon: faUser, title: user.admin ? "Admin user" : "Normal user", className: `${user.admin ? "text-red-600" : "text-blue-800"}` }}>{user.name || user.id}</IconItem>
                         </Link>
                         <Link href="/inbox" className="h-full flex flex-col content-center">
                             <IconItem icon={{ icon: faInbox, className: notifications?.some(n => !n.read) ? `after:absolute after:bg-red-600 after:rounded-full after:p-1 after:-top-0.5 after:-left-0.5 relative` : ""}}>Inbox</IconItem>

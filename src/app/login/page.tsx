@@ -32,7 +32,7 @@ export default function Login() {
     if (user?.id && user.name) {
       toast(() => (
         <>
-          Already logged in. Do you want to <a className="ml-1 text-blue-600 underline" href="/logout">log out</a>?
+          Already logged in. Do you want to <a className="ml-1 text-blue-800 underline" href="/logout">log out</a>?
         </>
       ))
       if (reloadNotifs) reloadNotifs()
@@ -59,7 +59,7 @@ export default function Login() {
               value={email}
               disabled={pending}
               onChange={(e) => setEmail(e.target.value)}
-              className="my-1 border-black border-3 rounded p-1"
+              className="my-1 border-black border-3 p-1"
               onKeyDown={(e) => e.key == "Enter" && startTransition(() => action({ type: "send", email: email }))}
             />
             <div className="text-red-600">{errors?.email?.join(", ")}</div>
@@ -78,13 +78,13 @@ export default function Login() {
 
         {step === "otp" && (
           <>
-            <h1 className="text-md max-w-60">Message sent! Check your inbox and spam for a message from <span className="text-blue-600">auth@mail.hekinav.dev</span></h1>
+            <h1 className="text-md max-w-60">Message sent! Check your inbox and spam for a message from <span className="text-blue-800">auth@mail.hekinav.dev</span></h1>
             <input
               placeholder="OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
               disabled={pending}
-              className="my-2 border-black border-3 rounded p-1"
+              className="my-2 border-black border-3 p-1"
               onKeyDown={(e) => e.key == "Enter" && startTransition(() => action({ type: "verify", email: email, otp: otp }))}
             />
             <div className="text-red-600">{errors?.otp?.join(", ")}</div>
@@ -100,7 +100,7 @@ export default function Login() {
         )}
         {step === "username" && (
           <>
-            <h1 className="text-md max-w-60">Succesfully created account! Please enter a username to be shown instead of your user id <span className="text-blue-600">{user?.id}</span></h1>
+            <h1 className="text-md max-w-60">Succesfully created account! Please enter a username to be shown instead of your user id <span className="text-blue-800">{user?.id}</span></h1>
             <input
               id="email"
               name="email"
@@ -108,7 +108,7 @@ export default function Login() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               disabled={pending}
-              className="my-2 border-black border-3 rounded p-1"
+              className="my-2 border-black border-3 p-1"
             />
             <div className="text-red-600">{errors?.username?.join(", ")}</div>
             <Button

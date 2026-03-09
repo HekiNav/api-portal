@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 export default function CopyItem({content, prefix}:{content: string, prefix: string}){
     const [icon, setIcon] = useState(faCopy)
     return (
-        <span className="text-xs text-gray-700 bg-white rounded px-1 h-min ml-6">
+        <span className="text-xs text-gray-700 bg-white px-1 h-min ml-6">
             {prefix}
             {content}
             <button className="ml-1">

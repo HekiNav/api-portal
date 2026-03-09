@@ -42,7 +42,7 @@ export default function MyUserPage() {
             <UserUI user={user} isCurrentUser></UserUI>
             <h1 className="ml-4 mt-8 text-2xl font-medium">Settings</h1>
             <div className="p-4">
-                <h1 className="text-lg text-blue-600 font-medium mb-4">Edit details</h1>
+                <h1 className="text-lg text-blue-800 font-medium mb-4">Edit details</h1>
                 <label htmlFor="email">Update email</label><br />
                 <input
                     placeholder="Email"
@@ -52,7 +52,7 @@ export default function MyUserPage() {
                     name="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="my-1 border-black border-3 rounded p-1 text-blue-600"
+                    className="my-1 border-black border-3 p-1 text-blue-800"
                     onKeyDown={(e) => e.key == "Enter"}
                 />
                 <Button className="ml-2 mb-4" onClick={() => user.email != email ? setModalState("email") : toast("You haven't changed anything!")}>Update</Button><br />
@@ -65,7 +65,7 @@ export default function MyUserPage() {
                     name="username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="my-1 border-black border-3 rounded p-1 text-blue-600"
+                    className="my-1 border-black border-3 p-1 text-blue-800"
                     onKeyDown={(e) => e.key == "Enter"}
                 />
                 <Button className="ml-2 mb-4" onClick={() => user.name != username ? setModalState("username") : toast("You haven't changed anything!")}>Update</Button>
@@ -79,9 +79,9 @@ export default function MyUserPage() {
                     <span className="mt-2 text-red-600">Type {`"delete ${user.name}"`} to confirm</span>
                 </>}
                 {modalState == "username" && <>
-                    <h1 className="font-medium text-blue-600 text-xl">Change username?</h1>
+                    <h1 className="font-medium text-blue-800 text-xl">Change username?</h1>
                     <span className="mx-2">This action cannot be undone</span>
-                    <span className="mt-2 text-blue-600">Type {`"${username}"`} to confirm</span>
+                    <span className="mt-2 text-blue-800">Type {`"${username}"`} to confirm</span>
                 </>}
                 {modalState == "email" && <>
                     <h1 className="font-medium text-red-600 text-xl">Change email?</h1>
@@ -90,7 +90,7 @@ export default function MyUserPage() {
                 </>}
                 <input
                     onChange={(e) => setConfirmation(e.target.value)}
-                    className="my-1 border-black border-3 rounded p-1 text-black"
+                    className="my-1 border-black border-3 p-1 text-black"
                 />
                 <Button onClick={() => {
                     switch (modalState) {

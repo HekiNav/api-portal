@@ -1,4 +1,4 @@
-import { sqliteTable, integer, text, numeric, uniqueIndex, real, primaryKey } from "drizzle-orm/sqlite-core"
+import { sqliteTable, integer, text, uniqueIndex } from "drizzle-orm/sqlite-core"
 import { relations } from "drizzle-orm/relations";
 
 export const notification = sqliteTable("Notification", {
