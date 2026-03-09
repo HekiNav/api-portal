@@ -3,7 +3,7 @@
 'use client'
 import React, { ReactNode, useState } from 'react';
 import Icon from './icon';
-import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 
 export interface DropdownProps<T extends string | number> extends React.HTMLAttributes<HTMLDivElement> {
     items: DropdownItem<T>[],
