@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+	--background: #ffffff;
+	--foreground: #171717;
+}
+
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--font-sans: var(--font-karla);
+	--font-mono: var(--font-share-tech-mono)
+}
+
+/* @media (prefers-color-scheme: dark) {
+	:root {
+		--background: #0a0a0a;
+		--foreground: #ededed;
+	}
+} */
+
+.react-transform-wrapper, .react-transform-component {
+	width: 100% !important;
+	height: 100% !important;
+}
+
+body {
+	background: var(--background);
+	color: var(--foreground);
+	font-family: var(--font-karla);
+}
+.noselect {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+.notification {
+	h1 {
+		font-size: 1.5em;
+	}
+}
+.popup {
+	background-color: red;
+}

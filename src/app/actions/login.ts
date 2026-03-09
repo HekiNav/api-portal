@@ -1,0 +1,171 @@
+"use server";
+
+import crypto from "crypto";
+import { Resend } from "resend";
+import { cookies } from "next/headers";
+import { EmailSchema, NotificationType, OTPFormState, UsernameSchema } from "@/lib/definitions";
+import z from "zod";
+import { createDB } from "@/lib/db";
+import { otpCode, session, user } from "@/db/schema";
+import { and, eq, gt } from "drizzle-orm";
+import { sendNotification } from "@/lib/notification";
+
+const resend = new Resend(process.env.RESEND_API_KEY!)
+
+export interface OTPFormData {
+  type: "send" | "verify" | "username",
+  email: string,
+  otp?: string,
+  username?: string
+}
+export async function makeHash(text: string) {
+  return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", Buffer.from(text)))).map(b => b.toString(16).padStart(2, '0')).join('')
+}
+
+export async function login(state: OTPFormState, { type, email, otp, username }: OTPFormData): Promise<OTPFormState> {
+  const db = await createDB()
+  if (type == "send") {
+    const otp = Math.floor(100000 + Math.random() * 900000).toString()
+
+    const hash = await makeHash(otp)
+
+
+    const { data, error, success } = EmailSchema.safeParse(email)
+
+
+    if (!success) return {
+      errors: {
+        email: z.treeifyError(error).errors
+      },
+      step: state.step
+    }
+
+    await db.insert(otpCode).values({
+      email: data,
+      codeHash: hash,
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+      createdAt: new Date(Date.now()),
+      used: false,
+      id: crypto.randomUUID()
+    })
+    await resend.emails.send({
+      from: process.env.FROM_EMAIL!,
+      to: email,
+      subject: "Your login code",
+      html: `
+      <p>Your login code:</p>
+      <h2>${otp}</h2>
+      <p>Expires in 10 minutes.</p>
+    `,
+    })
+    return {
+      step: "otp"
+    }
+  } else if (type == "verify") {
+    if (!otp) return {
+      step: state?.step,
+      errors: {
+        otp: ["Empty code"]
+      }
+    }
+
+    const hash = await makeHash(otp)
+
+
+    const record = await db.query.otpCode.findFirst({
+      where: and(
+        eq(otpCode.email, email),
+        eq(otpCode.codeHash, hash),
+        eq(otpCode.used, false),
+        gt(otpCode.expiresAt, new Date()),
+      )
+    })
+
+    if (!record) {
+      return {
+        errors: {
+          otp: ["Invalid or expired code"]
+        },
+        step: state?.step
+      }
+    }
+
+    await db.update(otpCode).set({ used: true }).where(eq(otpCode.id, record.id))
+
+    const userData =
+      (await db.query.user.findFirst({ where: eq(user.email, email) })) ??
+      (await db.insert(user).values({ email: email, admin: false, id: crypto.randomUUID(), createdAt: new Date() }).returning())[0];
+    // create session
+    const sessionData = (await db.insert(session).values({
+      userId: userData.id,
+      id: crypto.randomUUID(),
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    }).returning())[0]
+      // dang parentheses ruining things
+      ; (await cookies()).set("session", sessionData.id, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        path: "/",
+      })
+    if (!userData.name) return {
+      step: "username"
+    }
+    else return {
+      step: "success"
+    }
+  } else if (type == "username") {
+    const userData = (await db.query.user.findFirst({ where: eq(user.email, email) }))
+    if (!userData) return {
+      step: "email"
+    }
+
+
+    const { success, error, data } = UsernameSchema.safeParse(username)
+
+    if (!success) return {
+      errors: {
+        username: z.treeifyError(error).errors
+      },
+      step: state.step
+    }
+    try {
+      await db.update(user).set({ name: data }).where(eq(user.email, email))
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.cause.toString().includes("UNIQUE constraint failed: User.name")) return {
+        errors: {
+          username: ["Username already in use"]
+        },
+        step: state.step
+      }
+      else {
+        return {
+          errors: {
+            username: ["Server error"]
+          },
+          step: state.step
+        }
+      }
+    }
+    sendNotification({
+      message: `
+      <h1>Welcome ${username}!</h1>
+      <p>Here are some things you can do:</p>
+      <a href="/map/new"><button class="bg-blue-600 cursor-pointer rounded shadow-xl/20 p-2">Create a map</button></a>
+      <a href="/play/daily"><button class="bg-blue-600 cursor-pointer rounded shadow-xl/20 p-2">Attempt the daily challenge</button></a>
+      <a href="/user/me"><button class="bg-blue-600 cursor-pointer rounded shadow-xl/20 p-2">View your profile</button></a>
+                      
+      `,
+      title: "Welcome to the Hekinav API Portal!",
+      recipient: userData.id,
+      type: NotificationType.TEXT
+    })
+    return {
+      step: "success"
+    }
+  }
+  return {
+    step: "email"
+  }
+}
