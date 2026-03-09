@@ -2,12 +2,10 @@ import { FontAwesomeIcon, FontAwesomeIconProps } from "@fortawesome/react-fontaw
 import { PropsWithChildren } from "react";
 
 export interface IconProps extends FontAwesomeIconProps, PropsWithChildren {
-    boxed?: boolean
-    small?: boolean
 }
 
 export default function Icon(props: IconProps) {
-    const {boxed, small, ...otherProps} = props
+    const {...otherProps} = props
     return (
         <div className={`${props.className || ""} flex items-center`}>
             <FontAwesomeIcon  {...{...otherProps, className: `${props.className}`}} widthAuto></FontAwesomeIcon>
