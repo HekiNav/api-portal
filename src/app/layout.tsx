@@ -41,7 +41,7 @@ export default async function RootLayout({
 
 				<UserProvider user={user} notifs={notifications}>
 					<div className="flex flex-col divide-y-2 divide-blue-800 h-full min-h-screen overflow-y-scroll relative grow relative">
-						<div className="h-max flex min-h-full flex-col grow shrink-0">
+						<div className="h-max flex min-h-full flex-col grow shrink-0 divide-y-2 divide-blue-800">
 							<NavBar></NavBar>
 							<div className="grow">
 								{children}

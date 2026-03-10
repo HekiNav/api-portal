@@ -9,20 +9,24 @@ export interface SearchableProps {
 export type SearchableFieldKey<T extends string> = T extends "content" ? never : T
 export type SearchableItem = {
     content: JSX.Element,
+    id: string,
     [key: SearchableFieldKey<string>]: string | JSX.Element
 }
 export default function Searchable({ items }: SearchableProps) {
     const [query, setQuery] = useState<string>("")
     const [results, setResults] = useState<ReactNode[]>(items.map(i => i.content))
     const miniSearch = useMemo(() => new MiniSearch<SearchableItem>({
-        fields: Object.keys(items[0]),
+        fields: Object.keys(items[0]).filter(e => e != "id" && e != "content"),
         storeFields: ["content"]
     }), [items])
-    miniSearch.addAll(items)
+    items.forEach(i => {
+        if (miniSearch.has(i.id)) return
+        miniSearch.add(i)
+    })
     useEffect(() => {
         if (query.length < 2) return setResults(items.map(i => i.content))
         setResults(miniSearch.search(query, {
-            fuzzy: 0.9
+            fuzzy: 0.8,
         }).map(i => ((i as unknown) as SearchableItem).content))
 
     }, [items, miniSearch, query])
