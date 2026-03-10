@@ -13,7 +13,7 @@ export default function Button(propsWithOnPress: ButtonProps) {
         {...{
             ...props,
             onClick: (e) => { if(props.onClick) props.onClick(e); if(onPress) onPress(e) },
-            onKeyDown: (e) => { if(props.onKeyDown) props.onKeyDown(e); if(e.key == "Enter" && onPress) onPress(e) }, className: `${red ? "active:bg-red-700": green ? "active:bg-green-700" :"active:bg-blue-900"} bg-blue-800 cursor-pointer text-white shadow-xl/20 p-2 ${props.disabled ? red ? "bg-red-700":"bg-blue-800" : ""} ${props.className}`
+            onKeyDown: (e) => { if(props.onKeyDown) props.onKeyDown(e); if(e.key == "Enter" && onPress) onPress(e) }, className: `${red ? "active:bg-red-700": green ? "active:bg-green-700" :"active:bg-blue-900"} bg-blue-800 cursor-pointer text-white p-2 ${props.disabled ? red ? "bg-red-700":"bg-blue-800" : ""} ${props.className}`
         }}
     >
         {props.children}

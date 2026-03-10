@@ -1,14 +1,15 @@
-import { IconProps } from "./icon"
-import Icon from "./icon"
-
+import { HTMLAttributes, JSX, ReactElement, ReactNode } from "react"
 export interface IconItemProps extends React.PropsWithChildren {
-    icon: IconProps,
+    icon: {
+        Icon: JSX.ElementType,
+    } & HTMLAttributes<SVGElement>,
     reversed?: boolean
 }
 export default function IconItem({children, icon, reversed = false}: IconItemProps) {
+    const {Icon, ...props} = icon
     return (
-        <div className={`flex ${reversed ? "flex-row-reverse" : "flex-row"} gap-2 items-center`}>
-            <Icon {...icon}></Icon>
+        <div className={`flex ${reversed ? "flex-row-reverse" : "flex-row"} items-center`}>
+            <Icon {...props}/>
             {children}
         </div>
     )

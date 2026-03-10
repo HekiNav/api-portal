@@ -2,24 +2,24 @@
 import IconItem from "@/components/iconitem";
 import Toast from "@/components/toast";
 import { getCurrentUser } from "@/lib/auth";
-import { faHome, faServer, faUser } from "@fortawesome/free-solid-svg-icons";
+import { Dns, Home, Person } from "@nine-thirty-five/material-symbols-react/sharp";
 import Link from "next/link";
 
 const managePages = [
     {
         id: "",
         title: "Home",
-        icon: faHome
+        icon: Home
     },
     {
         id: "users",
         title: "Users",
-        icon: faUser
+        icon: Person
     },
     {
         id: "services",
         title: "Services",
-        icon: faServer
+        icon: Dns
     }
 ]
 
@@ -37,7 +37,7 @@ export default async function ManageLayout({
             <div className="flex flex-col h-full overflow-y-scroll divide-y-2 divide-blue-800 w-50 h-full  p-4 ">
                 {...managePages.map(({id, title, icon},index) => (
                     <Link key={index} href={`/manage/${id}`}>
-                        <IconItem icon={{icon, className: "py-2 text-blue-800"}}>{title}</IconItem>
+                        <IconItem icon={{Icon: icon, className: "py-2 text-blue-800"}}>{title}</IconItem>
                     </Link>
                 ))}
             </div>

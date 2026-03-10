@@ -5,9 +5,8 @@ import { useContext, useState } from "react"
 import { NotificationContext } from "../user-provider"
 import { momentToTZ, Notification } from "@/lib/definitions"
 import Modal from "@/components/modal"
-import Icon from "@/components/icon"
-import { faEnvelope, faEnvelopeOpen } from "@fortawesome/free-solid-svg-icons"
 import { markAsRead } from "../actions/inbox"
+import { Mail, Drafts } from "@nine-thirty-five/material-symbols-react/sharp"
 
 
 export default function InboxPage() {
@@ -27,7 +26,7 @@ export default function InboxPage() {
                             <span className="px-1">{momentToTZ(n.creationTime).fromNow()}</span>
                             <span className="px-1 text-blue-800">{n.title}</span>
                         </div>
-                        <Icon icon={n.read ? faEnvelopeOpen : faEnvelope}></Icon>
+                        {n.read ? <Drafts className="h-5" /> : <Mail className="h-5"/>}
                     </div>
                 ))}
                 {notifs?.length == 0 && (

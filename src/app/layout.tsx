@@ -40,8 +40,8 @@ export default async function RootLayout({
 				<Toaster position="top-right" containerClassName="mt-10"></Toaster>
 
 				<UserProvider user={user} notifs={notifications}>
-					<div className="flex flex-col h-full min-h-screen overflow-y-scroll relative grow relative">
-						<div className="h-max shadow-lg/20 flex min-h-full flex-col grow shrink-0">
+					<div className="flex flex-col divide-y-2 divide-blue-800 h-full min-h-screen overflow-y-scroll relative grow relative">
+						<div className="h-max flex min-h-full flex-col grow shrink-0">
 							<NavBar></NavBar>
 							<div className="grow">
 								{children}

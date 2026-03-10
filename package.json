@@ -14,10 +14,8 @@
 	},
 	"dependencies": {
 		"@eslint/compat": "^2.0.0",
-		"@fortawesome/fontawesome-svg-core": "^7.1.0",
-		"@fortawesome/free-solid-svg-icons": "^7.1.0",
-		"@fortawesome/react-fontawesome": "^3.1.1",
 		"@libsql/client": "^0.17.0",
+		"@nine-thirty-five/material-symbols-react": "^1.26.1",
 		"@opennextjs/cloudflare": "^1.14.8",
 		"@types/geojson": "^7946.0.16",
 		"dayjs": "^1.11.19",

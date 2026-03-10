@@ -1,9 +1,8 @@
 // Dropdown.js 
 
 'use client'
+import { KeyboardArrowDown, KeyboardArrowUp } from "@nine-thirty-five/material-symbols-react/sharp";
 import React, { ReactNode, useState } from 'react';
-import Icon from './icon';
-import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 
 export interface DropdownProps<T extends string | number> extends React.HTMLAttributes<HTMLDivElement> {
     items: DropdownItem<T>[],
@@ -40,18 +39,20 @@ export default function Dropdown<T extends string | number>(props: DropdownProps
                 type="button"
                 className={`inline-flex justify-center w-full
                                 border-2 border-blue-800 
-                               shadow-lg/20 ${small ? "px-2 py-1" : "px-4 py-2"} bg-white text-sm
+                            ${small ? "px-2 py-1" : "px-4 py-2"} bg-white text-sm
                                font-medium text-black hover:bg-blue-800`}
                 onClick={toggleDropdown}
             >
                 {selectedLanguage.content}
-                <Icon className="ml-1" icon={top ? faCaretUp : faCaretDown}></Icon>
+                <div className="ml-1">
+                    {top ? <KeyboardArrowUp/> : <KeyboardArrowDown/>}
+                </div>
             </button>
 
             {isOpen && (
                 <div className={`${top ? "origin-bottom-right bottom-[100%] mb-2" : "origin-top-right mt-2"} absolute z-1000
                                     left-0 ${small ? "w-min max-h-40 overflow-scroll" : "w-56"} 
-                                    shadow-lg bg-white ring-2 ring-blue-800
+                                    bg-white ring-2 ring-blue-800
                                     ring-opacity-5 focus:outline-none`}>
                     <div>
                         {items.map(({ content, id }, index) => (
