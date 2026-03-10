@@ -102,3 +102,12 @@ export async function changeEmail(newEmail: string) {
         message: "Succesfully changed email!"
     }
 }
+
+export async function getUsers() {
+    const db = await createDB()
+    return (await db.query.user.findMany({
+        with: {
+            sessions: true
+        }
+    })).map(({sessions, ...user}) => ({...user, lastSeen: sessions}))
+}

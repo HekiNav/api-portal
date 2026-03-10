@@ -12,6 +12,5 @@ export async function getUser(identifier: string): Promise<User | null> {
         with: { sessions: { limit: 1, orderBy: desc(session.expiresAt) } }
     })
     if (!data) return null
-    // redact email, also booleans are stored as strings in the db
-    return {...data, lastSeen: data.sessions[0].expiresAt}
+    return {...data, lastSeen: data.sessions[0].expiresAt, email: "N/A", sessions: undefined}
 }

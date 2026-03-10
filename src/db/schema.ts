@@ -12,8 +12,14 @@ export const notification = sqliteTable("Notification", {
 	title: text().notNull(),
 })
 
+export enum UserState {
+	BANNED,
+	NORMAL
+}
+
 export const user = sqliteTable("User", {
 	id: text().primaryKey().notNull(),
+	state: integer().$type<UserState>(),
 	name: text(),
 	admin: integer({mode: "boolean"}).notNull(),
 	email: text().notNull(),
