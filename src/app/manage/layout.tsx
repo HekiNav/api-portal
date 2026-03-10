@@ -37,7 +37,7 @@ export default async function ManageLayout({
             <div className="flex flex-col h-full overflow-y-scroll divide-y-2 divide-blue-800 w-50 h-full  p-4 ">
                 {...managePages.map(({id, title, icon},index) => (
                     <Link key={index} href={`/manage/${id}`}>
-                        <IconItem icon={{Icon: icon, className: "py-2 text-blue-800"}}>{title}</IconItem>
+                        <IconItem icon={{Icon: icon, className: "py-2 h-8 text-blue-800"}}>{title}</IconItem>
                     </Link>
                 ))}
             </div>

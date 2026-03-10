@@ -3,20 +3,29 @@ import { Check, Close, ContentCopy } from "@nine-thirty-five/material-symbols-re
 import { JSX, useState } from "react";
 import { toast } from "react-hot-toast";
 
+type IconKey = "copy" | "check" | "close";
+
+const icons: Record<IconKey, React.ElementType> = {
+  copy: ContentCopy,
+  check: Check,
+  close: Close,
+};
+
 export default function CopyItem({content, prefix}:{content: string, prefix: string}){
-    const [Icon, setIcon] = useState<JSX.ElementType>(ContentCopy)
+    const [icon, setIcon] = useState<IconKey>("copy")
+    const Icon = icons[icon]
     return (
-        <span className="text-xs text-gray-700 bg-white px-1 h-min ml-6">
+        <span className="text-xs text-gray-700 bg-white ps-1 h-min ml-6 flex items-center">
             {prefix}
             {content}
-            <button className="ml-1">
-                <Icon size="xs" onClick={() => {
+            <button>
+                <Icon className="h-3" onClick={() => {
                     navigator.clipboard.writeText(content).then(() => {
-                        setIcon(Check)
-                        setTimeout(() => setIcon(ContentCopy), 1000)
+                        setIcon("check")
+                        setTimeout(() => setIcon("copy"), 1000)
                     }).catch((err) => {
-                        setIcon(Close)
-                        setTimeout(() => setIcon(ContentCopy), 1000)
+                        setIcon("close")
+                        setTimeout(() => setIcon("copy"), 1000)
                         toast(err)
                     })
                 }}></Icon>
