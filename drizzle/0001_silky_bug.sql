@@ -1,0 +1,1 @@
+ALTER TABLE `User` ADD `state` integer DEFAULT 1 NOT NULL;

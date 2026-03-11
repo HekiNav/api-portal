@@ -1,13 +1,13 @@
 "use server"
-import { user } from "@/db/schema";
+import { session, user, UserState } from "@/db/schema";
 import { getCurrentUser } from "@/lib/auth";
 import { createDB } from "@/lib/db";
-import { EmailSchema, UsernameSchema } from "@/lib/definitions";
-import { eq } from "drizzle-orm";
+import { EmailSchema, User, UsernameSchema } from "@/lib/definitions";
+import { desc, eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import z from "zod";
 
-export async function deleteUser() {
+export async function deleteUser(userId?: string) {
     const db = await createDB()
 
     const currentUser = await getCurrentUser()
@@ -16,14 +16,64 @@ export async function deleteUser() {
         success: false,
         message: "Not logged in!"
     }
+    if (userId) {
+        if (!currentUser.admin) return {
+            success: false,
+            message: "Insufficient authority"
+        }
+        if (currentUser.id == userId) return {
+            success: false,
+            message: "Cannot delete yourself via Manage. Go to settings instead."
+        }
+        const userToDelete = await db.query.user.findFirst({
+            where: eq(user.id, userId)
+        })
+        if (!userToDelete) return {
+            success: false,
+            message: "Could not find user"
+        }
+        await db.delete(user).where(eq(user.id, userToDelete.id));
 
+    } else {
+        await db.delete(user).where(eq(user.id, currentUser.id));
+        (await cookies()).delete("session");
+    }
 
-    await db.delete(user).where(eq(user.id, currentUser.id));
-    (await cookies()).delete("session");
 
     return {
         success: true,
         message: "Deleted user"
+    }
+
+}
+
+export async function setUserState(userId: string, state: UserState) {
+    const db = await createDB()
+
+    const currentUser = await getCurrentUser()
+
+    if (!currentUser) return {
+        success: false,
+        message: "Not logged in!"
+    }
+        if (!currentUser.admin) return {
+            success: false,
+            message: "Insufficient authority"
+        }
+        const userToUpdate = await db.query.user.findFirst({
+            where: eq(user.id, userId)
+        })
+        if (!userToUpdate) return {
+            success: false,
+            message: "Could not find user"
+        }
+        await db.update(user).set({
+            state: state
+        }).where(eq(user.id, userToUpdate.id));
+
+    return {
+        success: true,
+        message: "Updated user state"
     }
 
 }
@@ -103,11 +153,11 @@ export async function changeEmail(newEmail: string) {
     }
 }
 
-export async function getUsers() {
+export async function getUsers(): Promise<User[]> {
     const db = await createDB()
     return (await db.query.user.findMany({
         with: {
-            sessions: true
+            sessions: { limit: 1, orderBy: desc(session.expiresAt) }
         }
-    })).map(({sessions, ...user}) => ({...user, lastSeen: sessions}))
+    })).map(({ sessions, ...user }) => ({ ...user, lastSeen: sessions[0]?.expiresAt }))
 }

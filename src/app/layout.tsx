@@ -6,6 +6,7 @@ import NavBar from "@/components/navbar";
 import { getCurrentUser } from "@/lib/auth";
 import UserProvider from "./user-provider";
 import { getNotifications } from "@/lib/notification";
+import AreYouSure from "@/components/areyousure";
 
 const karla = Karla({
 	variable: "--font-karla",
@@ -40,17 +41,19 @@ export default async function RootLayout({
 				<Toaster position="top-right" containerClassName="mt-10"></Toaster>
 
 				<UserProvider user={user} notifs={notifications}>
-					<div className="flex flex-col divide-y-2 divide-blue-800 h-full min-h-screen overflow-y-scroll relative grow relative">
-						<div className="h-max flex min-h-full flex-col grow shrink-0 divide-y-2 divide-blue-800">
-							<NavBar></NavBar>
-							<div className="grow">
-								{children}
+					<AreYouSure>
+						<div className="flex flex-col divide-y-2 divide-blue-800 h-full min-h-screen overflow-y-scroll relative grow relative">
+							<div className="h-max flex min-h-full flex-col grow shrink-0 divide-y-2 divide-blue-800">
+								<NavBar></NavBar>
+								<div className="grow">
+									{children}
+								</div>
 							</div>
+							<footer className="p-8 w-full">
+								<span className="text-blue-800 font-mono mr-2">Api key portal</span>	© Hekinav {new Date().getFullYear()}
+							</footer>
 						</div>
-						<footer className="p-8 w-full">
-							<span className="text-blue-800 font-mono mr-2">Api key portal</span>	© Hekinav {new Date().getFullYear()}
-						</footer>
-					</div>
+					</AreYouSure>
 				</UserProvider>
 
 			</body>

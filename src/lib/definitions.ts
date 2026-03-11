@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import * as z from 'zod'
 import RelativeTime from "dayjs/plugin/relativeTime"
+import { UserState } from '@/db/schema';
 dayjs.extend(RelativeTime)
 
 export const EmailSchema = z.email({ error: 'Please enter a valid email.' }).trim()
@@ -26,6 +27,7 @@ export interface User {
   id: string
   name: string | null
   admin: boolean
+  state: UserState,
   email: string
   createdAt: Date
   sessions?: Session[],

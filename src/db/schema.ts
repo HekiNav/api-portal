@@ -19,7 +19,7 @@ export enum UserState {
 
 export const user = sqliteTable("User", {
 	id: text().primaryKey().notNull(),
-	state: integer().$type<UserState>(),
+	state: integer().$type<UserState>().notNull().default(UserState.NORMAL),
 	name: text(),
 	admin: integer({mode: "boolean"}).notNull(),
 	email: text().notNull(),

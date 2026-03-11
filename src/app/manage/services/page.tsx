@@ -3,7 +3,9 @@ import Button from "@/components/button"
 import Card from "@/components/card"
 import Searchable from "@/components/searchable"
 import { UserState } from "@/db/schema"
+import { doServer } from "@/lib/definitions"
 import dayjs from "dayjs"
+import toast from "react-hot-toast"
 
 export default async function ServicesManagePage() {
     const users = await getUsers()
@@ -16,6 +18,7 @@ export default async function ServicesManagePage() {
                     <span className="p-1">Last seen: {dayjs(u.createdAt).fromNow()}</span>
                     <Button hidden={u.state != UserState.BANNED} className="p-1! bg-blue-400!">Unban</Button>
                     <Button hidden={u.state == UserState.BANNED} className="p-1! bg-blue-400!">Ban</Button>
+                    
                 </Card>,
                 id: u.id,
                 name: u.name || u.id

@@ -30,7 +30,7 @@ export default async function ManageLayout({
 }>) {
     const user = await getCurrentUser()
     if (!user?.admin) return <>
-        <Toast message="You ned to be an admin to access this." type="info" redirectUrl="/"></Toast>
+        <Toast message="You need to be an admin to access this." type="info" redirectUrl="/"></Toast>
     </>
     return (
         <div className="flex-row flex divide-x-2 divide-blue-800 h-full w-full">
