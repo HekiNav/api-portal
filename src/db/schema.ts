@@ -16,6 +16,11 @@ export enum UserState {
 	BANNED,
 	NORMAL
 }
+export enum Visibility {
+	PUBLIC,
+	HIDDEN,
+	PRIVATE
+}
 
 export const user = sqliteTable("User", {
 	id: text().primaryKey().notNull(),
@@ -44,6 +49,26 @@ export const session = sqliteTable("Session", {
 	userId: text().notNull().references(() => user.id, { onDelete: "cascade", onUpdate: "cascade" }),
 	expiresAt: integer({mode: "timestamp_ms"}).notNull(),
 });
+
+export const service = sqliteTable("Service", {
+	id: text().primaryKey().notNull(),
+	createdById: text().notNull().references(() => user.id, {onDelete: "cascade", onUpdate: "cascade"}),
+	name: text().notNull(),
+	description: text().notNull(),
+	docsUrl: text(),
+	apiUrl: text().notNull(),
+	version: integer().notNull(),
+	updateTime: integer({mode: "timestamp_ms"}).notNull(),
+	creationTime: integer({mode: "timestamp_ms"}).notNull(),
+	visibility: integer().$type<Visibility>().notNull()
+});
+
+export const serviceRelations = relations(service, ({ one }) => ({
+	createdBy: one(user, {
+		fields: [service.createdById],
+		references: [user.id]
+	})
+}));
 
 export const notificationRelations = relations(notification, ({ one }) => ({
 	sender: one(user, {

@@ -41,7 +41,7 @@ export default function Searchable({ items }: SearchableProps) {
                 className="my-1 border-black border-3 p-1 accent-blue-800"
             />
             <div className="flex flex-row flex-wrap gap-2">
-                {...results.map((r, i) => (
+                {...results.map((r) => (
                     <>
                         {r}
                     </>

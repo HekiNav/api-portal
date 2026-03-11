@@ -1,6 +1,6 @@
 "use server"
 import { session, user, UserState } from "@/db/schema";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, userAdmin } from "@/lib/auth";
 import { createDB } from "@/lib/db";
 import { EmailSchema, User, UsernameSchema } from "@/lib/definitions";
 import { desc, eq } from "drizzle-orm";
@@ -157,7 +157,8 @@ export async function changeEmail(newEmail: string) {
     }
 }
 
-export async function getUsers(): Promise<User[]> {
+export async function getUsers(): Promise<User[]|null> {
+    if (!await userAdmin()) return null
     const db = await createDB()
     return (await db.query.user.findMany({
         with: {

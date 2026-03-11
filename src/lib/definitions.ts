@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import * as z from 'zod'
 import RelativeTime from "dayjs/plugin/relativeTime"
-import { UserState } from '@/db/schema';
+import { UserState, Visibility } from '@/db/schema';
 dayjs.extend(RelativeTime)
 
 export const EmailSchema = z.email({ error: 'Please enter a valid email.' }).trim()
@@ -37,6 +37,19 @@ export interface Session {
   id: string
   userId: string
   expiresAt: Date
+}
+
+export interface Service {
+  id: string,
+    createdById: string,
+    name: string,
+    description: string,
+    docsUrl: string|null,
+    apiUrl: string,
+    version: number,
+    updateTime: Date,
+    creationTime: Date,
+    visibility: Visibility
 }
 export function rib(a: number, b: number) {
   return Math.floor(Math.random() * (b - a) + a)

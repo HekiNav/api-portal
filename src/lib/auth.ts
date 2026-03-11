@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { createDB } from "./db";
-import { session, user, UserState } from "@/db/schema";
+import { session, UserState } from "@/db/schema";
 import { and, eq, gt } from "drizzle-orm";
 import { User } from "./definitions";
 
@@ -16,4 +16,8 @@ export async function getCurrentUser(): Promise<User | null> {
   if (sessionData?.user.state == UserState.BANNED) return null
 
   return sessionData?.user ? {...sessionData.user, lastSeen: sessionData.expiresAt} : null
+}
+export async function userAdmin() {
+  const user = await getCurrentUser()
+  return user?.admin || false
 }

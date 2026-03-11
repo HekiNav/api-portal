@@ -1,28 +1,25 @@
-import { getUsers } from "@/app/actions/user"
-import Button from "@/components/button"
-import Card from "@/components/card"
 import Searchable from "@/components/searchable"
-import { UserState } from "@/db/schema"
-import { doServer } from "@/lib/definitions"
-import dayjs from "dayjs"
-import toast from "react-hot-toast"
+import { getServices } from "@/app/actions/service"
+import Toast from "@/components/toast"
+import ServiceCard from "./card"
+import EditServiceModal from "./edit"
 
-export default async function ServicesManagePage() {
-    const users = await getUsers()
+export default async function UsersManagePage() {
+    const services = await getServices()
+    if (!services) return (
+        <Toast message="Failed to load" type={"error"}></Toast>
+    )
+    console.log(services)
     return (
         <div className="p-4">
             <h1 className="text-2xl font-mono text-blue-800">Manage services</h1>
-            <Searchable items={users.map((u, i) => ({
-                content: <Card small className="w-50! gap-2" cardTitle={u.name || u.id} key={i}>
-                    <span className="p-1" hidden={u.state != UserState.BANNED}>BANNED</span>
-                    <span className="p-1">Last seen: {dayjs(u.createdAt).fromNow()}</span>
-                    <Button hidden={u.state != UserState.BANNED} className="p-1! bg-blue-400!">Unban</Button>
-                    <Button hidden={u.state == UserState.BANNED} className="p-1! bg-blue-400!">Ban</Button>
-                    
-                </Card>,
-                id: u.id,
-                name: u.name || u.id
-            }))}></Searchable>
+            {services.length ? <Searchable items={services.map((s, i) => ({
+                content: <ServiceCard key={i} s={s}></ServiceCard>,
+                id: s.id,
+                name: s.name,
+                description: s.description
+            }))}></Searchable> : <p>No services</p>}
+            <EditServiceModal s={null}/>
         </div>
     )
 }
