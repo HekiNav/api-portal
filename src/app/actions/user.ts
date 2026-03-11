@@ -60,6 +60,10 @@ export async function setUserState(userId: string, state: UserState) {
             success: false,
             message: "Insufficient authority"
         }
+        if (currentUser.id == userId) return {
+            success: false,
+            message: "Cannot ban/unban yourself."
+        }
         const userToUpdate = await db.query.user.findFirst({
             where: eq(user.id, userId)
         })

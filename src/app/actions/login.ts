@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import { EmailSchema, NotificationType, OTPFormState, UsernameSchema } from "@/lib/definitions";
 import z from "zod";
 import { createDB } from "@/lib/db";
-import { otpCode, session, user } from "@/db/schema";
+import { otpCode, session, user, UserState } from "@/db/schema";
 import { and, eq, gt } from "drizzle-orm";
 import { sendNotification } from "@/lib/notification";
 
@@ -94,8 +94,16 @@ export async function login(state: OTPFormState, { type, email, otp, username }:
 
     const userData =
       (await db.query.user.findFirst({ where: eq(user.email, email) })) ??
-      (await db.insert(user).values({ email: email, admin: false, id: crypto.randomUUID(), createdAt: new Date() }).returning())[0];
-    // create session
+      (await db.insert(user).values({ email: email, admin: false, id: crypto.randomUUID(), createdAt: new Date(), state: UserState.NORMAL }).returning())[0];
+    if (userData.state == UserState.BANNED) {
+      return {
+        step: "email",
+        errors: {
+          server: ["BANNED"]
+        }
+      }
+    }
+      // create session
     const sessionData = (await db.insert(session).values({
       userId: userData.id,
       id: crypto.randomUUID(),

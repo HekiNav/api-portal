@@ -20,7 +20,7 @@ export type FormState<E extends readonly string[]> =
     }
     step?: string
   }
-export type OTPFormState = FormState<["email", "otp", "username"]>
+export type OTPFormState = FormState<["email", "otp", "username", "server"]>
 
 export interface User {
   lastSeen?: Date

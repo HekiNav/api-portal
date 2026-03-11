@@ -45,6 +45,12 @@ export default function Login() {
     }
   }, [step, router, successPath, user?.id, user?.name, params, reloadNotifs])
 
+  useEffect(() => {
+    if (errors?.server) {
+      errors.server.forEach(err => toast.error(err))
+    }
+  }, [errors])
+
   return (
     <div className="w-full h-full flex items-center grow justify-center">
       <Card cardTitle="Login using OTP" className="transition-all ease-out duration-500">

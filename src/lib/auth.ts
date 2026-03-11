@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { createDB } from "./db";
-import { session } from "@/db/schema";
+import { session, user, UserState } from "@/db/schema";
 import { and, eq, gt } from "drizzle-orm";
 import { User } from "./definitions";
 
@@ -12,6 +12,8 @@ export async function getCurrentUser(): Promise<User | null> {
   const sessionData = await db.query.session.findFirst({
     where: and(eq(session.id, sessionId), gt(session.expiresAt, new Date())), with: { user: true }
   })
+
+  if (sessionData?.user.state == UserState.BANNED) return null
 
   return sessionData?.user ? {...sessionData.user, lastSeen: sessionData.expiresAt} : null
 }
