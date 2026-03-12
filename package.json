@@ -27,6 +27,7 @@
 		"next": "^15.5.9",
 		"react": "19.1.4",
 		"react-countup": "^6.5.3",
+		"react-datepicker": "^9.1.0",
 		"react-dom": "19.1.4",
 		"react-hot-toast": "^2.6.0",
 		"resend": "^6.6.0",

@@ -46,7 +46,7 @@ export interface Service {
     description: string,
     docsUrl: string|null,
     apiUrl: string,
-    version: number,
+    depreciationTime: Date|null,
     updateTime: Date,
     creationTime: Date,
     visibility: Visibility

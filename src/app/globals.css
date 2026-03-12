@@ -45,3 +45,6 @@ body {
 .popup {
 	background-color: red;
 }
+.react-datepicker__header {
+	padding: 0 !important;
+}

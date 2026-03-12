@@ -58,6 +58,7 @@ export const service = sqliteTable("Service", {
 	docsUrl: text(),
 	apiUrl: text().notNull(),
 	version: integer().notNull(),
+	depreciationTime: integer({mode: "timestamp_ms"}),
 	updateTime: integer({mode: "timestamp_ms"}).notNull(),
 	creationTime: integer({mode: "timestamp_ms"}).notNull(),
 	visibility: integer().$type<Visibility>().notNull()

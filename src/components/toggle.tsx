@@ -9,7 +9,7 @@ export default function Toggle({ state, setState, noColors=false }: ToggleProps)
     return (<div className="bg-gray-300 p-1 flex flex-col h-6 w-10 m-1 mx-2" onClick={() => setState(!state)}>
         <div style={{
             transform: `translate(${state ? "100" : "0"}%,0)`
-        }} className={`w-5/10 h-full transition duration-500 ease-in-out bg-gray-600 ${state && !noColors ? "bg-blue-800" : !noColors && "bg-red-600"}`}>
+        }} className={`w-5/10 h-full transition duration-500 ease-in-out bg-gray-600 ${state ? !noColors && "bg-blue-800!" : !noColors && "bg-gray-500!"}`}>
 
         </div>
     </div>)

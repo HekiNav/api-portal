@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Karla, Quicksand } from "next/font/google";
 import { Toaster } from "react-hot-toast"
 import "./globals.css";
+import "react-datepicker/dist/react-datepicker.css";
 import NavBar from "@/components/navbar";
 import { getCurrentUser } from "@/lib/auth";
 import UserProvider from "./user-provider";
