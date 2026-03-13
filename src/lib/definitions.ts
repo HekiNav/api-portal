@@ -15,11 +15,12 @@ export const UsernameSchema = z.string()
 
 export type FormState<E extends readonly string[]> =
   | {
-    errors?: {
-      [P in E[number]]?: string[]
-    }
+    errors?: FormErrors<E>
     step?: string
   }
+export type FormErrors<E extends readonly string[]> = {
+      [P in E[number]]?: {errors?: string[]}
+    }
 export type OTPFormState = FormState<["email", "otp", "username", "server"]>
 
 export interface User {

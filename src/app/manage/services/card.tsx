@@ -4,7 +4,6 @@ import { AreYouSureContext } from "@/components/areyousure";
 import Button from "@/components/button";
 import Card from "@/components/card";
 import { doServer, Service } from "@/lib/definitions";
-import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import toast from "react-hot-toast";

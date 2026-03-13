@@ -4,13 +4,23 @@ import Button from "@/components/button"
 import IconItem from "@/components/iconitem"
 import Modal from "@/components/modal"
 import Toggle from "@/components/toggle"
-import { Service } from "@/lib/definitions"
+import { FormErrors, Service } from "@/lib/definitions"
 import { Add, ArrowBackIos, ArrowForwardIos, EditCalendar } from "@nine-thirty-five/material-symbols-react/sharp"
 import dayjs from "dayjs"
-import { forwardRef, PropsWithChildren, Ref, useContext, useState } from "react"
+import { PropsWithChildren, useContext, useEffect, useState } from "react"
 import { DatePicker } from "react-datepicker"
+import z from "zod"
 
-export default forwardRef(function ({ s, children }: { s: Service | null } & PropsWithChildren) {
+export const ServiceEditSchema = z.object({
+    name: z.string().min(2).max(50),
+    description: z.string().max(50).nullable(),
+    apiUrl: z.url(),
+    docsUrl: z.url().nullable(),
+    depreciationTime: z.date().nullable()
+})
+
+
+export default function EditService({ s, children }: { s: Service | null } & PropsWithChildren) {
 
     const [name, setName] = useState(s?.name || "")
     const [description, setDescription] = useState(s?.description || "")
@@ -22,6 +32,22 @@ export default forwardRef(function ({ s, children }: { s: Service | null } & Pro
     const [visible, setVisible] = useState(false)
 
     const openAreYouSure = useContext(AreYouSureContext)
+
+    const [errors, setErrors] = useState<FormErrors<["name", "description", "apiUrl", "docsUrl", "depreciation", "depreciationTime"]>>({})
+    const [success, setSuccess] = useState(false)
+
+
+    useEffect(() => {
+        const { success, error } = z.safeParse(ServiceEditSchema, {
+            name,
+            description: description || null,
+            apiUrl,
+            docsUrl: docsUrl || null,
+            depreciationTime: (depreciation && depreciationTime) || null
+        })
+        setSuccess(success)
+        setErrors(error ? z.treeifyError(error).properties || {} : {})
+    }, [name, description, apiUrl, docsUrl, apiUrl, depreciation, depreciationTime])
 
     return (
         <>
@@ -43,6 +69,7 @@ export default forwardRef(function ({ s, children }: { s: Service | null } & Pro
                         onChange={(e) => setName(e.target.value)}
                         className="my-1 border-black border-3 p-1 text-blue-800 accent-blue-800 w-full"
                     />
+                    <span className="text-blue-400">{(name.length && errors.name?.errors)||""}</span>
 
                     <label htmlFor="serviceDescription" className="mt-2">
                         Description
@@ -56,6 +83,7 @@ export default forwardRef(function ({ s, children }: { s: Service | null } & Pro
                         onChange={(e) => setDescription(e.target.value)}
                         className="my-1 border-black border-3 p-1 text-blue-800 accent-blue-800 w-full"
                     />
+                    <span className="text-blue-400">{(description.length && errors.description?.errors)||""}</span>
 
                     <label htmlFor="apiUrl" className="mt-2">
                         API endpoint
@@ -70,6 +98,7 @@ export default forwardRef(function ({ s, children }: { s: Service | null } & Pro
                         onChange={(e) => setApiUrl(e.target.value)}
                         className="my-1 border-black border-3 p-1 text-blue-800 accent-blue-800 w-full"
                     />
+                    <span className="text-blue-400">{(apiUrl.length && errors.apiUrl?.errors)||""}</span>
 
                     <label htmlFor="docsUrl" className="mt-2">
                         Docs url
@@ -84,6 +113,7 @@ export default forwardRef(function ({ s, children }: { s: Service | null } & Pro
                         onChange={(e) => setDocsUrl(e.target.value)}
                         className="my-1 border-black border-3 p-1 text-blue-800 accent-blue-800 w-full"
                     />
+                    <span className="text-blue-400">{(docsUrl.length && errors.docsUrl?.errors)||""}</span>
 
                     <label htmlFor="depreciation" className="mt-2">
                         Depreciated
@@ -118,17 +148,18 @@ export default forwardRef(function ({ s, children }: { s: Service | null } & Pro
                             selected={depreciationTime}
                             onChange={(date: Date | null) => setDepreciationTime(date)}></DatePicker>
                     </div>
+                    <span className="text-blue-400">{(depreciation && errors.depreciationTime?.errors)||""}</span>
                     <span className="w-full flex gap-2 justify-center mt-2">
                         <Button className="bg-blue-400!" onClick={() => openAreYouSure({
                             body: "Are you sure you want to PERMANENTLY discard these changes?",
                             cardTitle: "Discard changes?",
                             onConfirm: () => setVisible(false)
                         })}>Cancel</Button>
-                        <Button>Save</Button>
+                        <Button disabled={!success}>Save</Button>
                     </span>
                 </div>
             </Modal>
         </>
     )
 
-})
+}
