@@ -35,7 +35,7 @@ export async function login(state: OTPFormState, { type, email, otp, username }:
 
     if (!success) return {
       errors: {
-        email: z.treeifyError(error).errors
+        email: {errors: z.treeifyError(error).errors}
       },
       step: state.step
     }
@@ -65,7 +65,7 @@ export async function login(state: OTPFormState, { type, email, otp, username }:
     if (!otp) return {
       step: state?.step,
       errors: {
-        otp: ["Empty code"]
+        otp: {errors: ["Empty code"]}
       }
     }
 
@@ -84,7 +84,7 @@ export async function login(state: OTPFormState, { type, email, otp, username }:
     if (!record) {
       return {
         errors: {
-          otp: ["Invalid or expired code"]
+          otp: {errors: ["Invalid or expired code"]}
         },
         step: state?.step
       }
@@ -99,7 +99,7 @@ export async function login(state: OTPFormState, { type, email, otp, username }:
       return {
         step: "email",
         errors: {
-          server: ["BANNED"]
+          server: {errors: ["BANNED"]}
         }
       }
     }
@@ -133,7 +133,7 @@ export async function login(state: OTPFormState, { type, email, otp, username }:
 
     if (!success) return {
       errors: {
-        username: z.treeifyError(error).errors
+        username: z.treeifyError(error)
       },
       step: state.step
     }
@@ -143,14 +143,14 @@ export async function login(state: OTPFormState, { type, email, otp, username }:
     } catch (error: any) {
       if (error.cause.toString().includes("UNIQUE constraint failed: User.name")) return {
         errors: {
-          username: ["Username already in use"]
+          username: {errors: ["Username already in use"]}
         },
         step: state.step
       }
       else {
         return {
           errors: {
-            username: ["Server error"]
+            username: {errors: ["Server error"]}
           },
           step: state.step
         }

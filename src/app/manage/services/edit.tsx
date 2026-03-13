@@ -1,19 +1,38 @@
 "use client"
+import { createService } from "@/app/actions/service"
 import { AreYouSureContext } from "@/components/areyousure"
 import Button from "@/components/button"
+import Dropdown from "@/components/dropdown"
 import IconItem from "@/components/iconitem"
 import Modal from "@/components/modal"
 import Toggle from "@/components/toggle"
-import { FormErrors, Service } from "@/lib/definitions"
+import { Visibility } from "@/db/schema"
+import { doServer, FormErrors, Service } from "@/lib/definitions"
 import { Add, ArrowBackIos, ArrowForwardIos, EditCalendar } from "@nine-thirty-five/material-symbols-react/sharp"
 import dayjs from "dayjs"
 import { PropsWithChildren, useContext, useEffect, useState } from "react"
 import { DatePicker } from "react-datepicker"
+import toast from "react-hot-toast"
 import z from "zod"
+
+export const visibilityItems = [
+    {
+        id: Visibility.HIDDEN,
+        content: "Hidden"
+    },
+    {
+        id: Visibility.PRIVATE,
+        content: "Private"
+    },
+    {
+        id: Visibility.PUBLIC,
+        content: "Public"
+    }
+]
 
 export const ServiceEditSchema = z.object({
     name: z.string().min(2).max(50),
-    description: z.string().max(50).nullable(),
+    description: z.string().max(200).nullable(),
     apiUrl: z.url(),
     docsUrl: z.url().nullable(),
     depreciationTime: z.date().nullable()
@@ -27,7 +46,9 @@ export default function EditService({ s, children }: { s: Service | null } & Pro
     const [apiUrl, setApiUrl] = useState(s?.apiUrl || "")
     const [docsUrl, setDocsUrl] = useState(s?.docsUrl || "")
     const [depreciation, setDepreciation] = useState(!!s?.depreciationTime)
+    const [keyRequired, setKeyRequired] = useState(!!s?.depreciationTime || false)
     const [depreciationTime, setDepreciationTime] = useState(s?.depreciationTime)
+    const [visibility, setVisibility] = useState<Visibility>(s?.visibility || Visibility.PRIVATE)
 
     const [visible, setVisible] = useState(false)
 
@@ -55,9 +76,9 @@ export default function EditService({ s, children }: { s: Service | null } & Pro
             {children}
             <Modal open={visible} className="bg-white items-start" cardTitle={`Editing ${name || "New service"}`}>
                 <div className="px-4 flex flex-col w-full">
-
+                    <span><span className="text-blue-600">*</span> Required</span>
                     <label htmlFor="serviceName">
-                        Name
+                        Name<span className="text-blue-600 ml-1">*</span>
                     </label>
                     <input
                         placeholder="New service"
@@ -69,7 +90,7 @@ export default function EditService({ s, children }: { s: Service | null } & Pro
                         onChange={(e) => setName(e.target.value)}
                         className="my-1 border-black border-3 p-1 text-blue-800 accent-blue-800 w-full"
                     />
-                    <span className="text-blue-400">{(name.length && errors.name?.errors)||""}</span>
+                    <span className="text-blue-400">{(name.length && errors.name?.errors) || ""}</span>
 
                     <label htmlFor="serviceDescription" className="mt-2">
                         Description
@@ -83,10 +104,10 @@ export default function EditService({ s, children }: { s: Service | null } & Pro
                         onChange={(e) => setDescription(e.target.value)}
                         className="my-1 border-black border-3 p-1 text-blue-800 accent-blue-800 w-full"
                     />
-                    <span className="text-blue-400">{(description.length && errors.description?.errors)||""}</span>
+                    <span className="text-blue-400">{(description.length && errors.description?.errors) || ""}</span>
 
                     <label htmlFor="apiUrl" className="mt-2">
-                        API endpoint
+                        API endpoint<span className="text-blue-600 ml-1">*</span>
                     </label>
                     <input
                         placeholder="https://example.com/api/v1/"
@@ -98,7 +119,7 @@ export default function EditService({ s, children }: { s: Service | null } & Pro
                         onChange={(e) => setApiUrl(e.target.value)}
                         className="my-1 border-black border-3 p-1 text-blue-800 accent-blue-800 w-full"
                     />
-                    <span className="text-blue-400">{(apiUrl.length && errors.apiUrl?.errors)||""}</span>
+                    <span className="text-blue-400">{(apiUrl.length && errors.apiUrl?.errors) || ""}</span>
 
                     <label htmlFor="docsUrl" className="mt-2">
                         Docs url
@@ -113,12 +134,17 @@ export default function EditService({ s, children }: { s: Service | null } & Pro
                         onChange={(e) => setDocsUrl(e.target.value)}
                         className="my-1 border-black border-3 p-1 text-blue-800 accent-blue-800 w-full"
                     />
-                    <span className="text-blue-400">{(docsUrl.length && errors.docsUrl?.errors)||""}</span>
+                    <span className="text-blue-400">{(docsUrl.length && errors.docsUrl?.errors) || ""}</span>
 
                     <label htmlFor="depreciation" className="mt-2">
                         Depreciated
                     </label>
                     <Toggle state={depreciation} setState={setDepreciation}></Toggle>
+
+                    <label htmlFor="keyRequired" className="mt-2">
+                        Access key required
+                    </label>
+                    <Toggle state={keyRequired} setState={setKeyRequired}></Toggle>
 
                     <label hidden={!depreciation} htmlFor="depreciationTime" className="mt-2">
                         Final support date
@@ -148,14 +174,28 @@ export default function EditService({ s, children }: { s: Service | null } & Pro
                             selected={depreciationTime}
                             onChange={(date: Date | null) => setDepreciationTime(date)}></DatePicker>
                     </div>
-                    <span className="text-blue-400">{(depreciation && errors.depreciationTime?.errors)||""}</span>
-                    <span className="w-full flex gap-2 justify-center mt-2">
+                    <span className="text-blue-400">{(depreciation && errors.depreciationTime?.errors) || ""}</span>
+
+                    <label htmlFor="visibility" className="mt-2">
+                        Visibility
+                    </label>
+                    <Dropdown top onSet={(i) => i && i.id && setVisibility(i.id)} items={visibilityItems} initial={visibilityItems.find(i => i.id == visibility)?.content}></Dropdown>
+
+                    <span id="visibility" className="w-full flex gap-2 justify-center mt-2">
                         <Button className="bg-blue-400!" onClick={() => openAreYouSure({
                             body: "Are you sure you want to PERMANENTLY discard these changes?",
                             cardTitle: "Discard changes?",
                             onConfirm: () => setVisible(false)
                         })}>Cancel</Button>
-                        <Button disabled={!success}>Save</Button>
+                        <Button disabled={!success} onPress={() => toast.promise(doServer(createService({
+                            visibility,
+                            name,
+                            description: description || null,
+                            apiUrl,
+                            docsUrl: docsUrl || null,
+                            depreciationTime: (depreciation && depreciationTime) || null,
+                            keyRequired
+                        })),{loading: "Creating service", success: "Created service!", error: ({message}) => `Could not create service: ${message}`})}>Save</Button>
                     </span>
                 </div>
             </Modal>

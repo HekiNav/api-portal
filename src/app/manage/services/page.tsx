@@ -19,7 +19,7 @@ export default async function UsersManagePage() {
                     content: <ServiceCard key={i} s={s}></ServiceCard>,
                     id: s.id,
                     name: s.name,
-                    description: s.description
+                    description: s.description || ""
                 }))}></Searchable> : <p>No services</p>}
             </EditService>
         </div>

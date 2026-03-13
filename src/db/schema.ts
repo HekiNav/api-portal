@@ -54,12 +54,12 @@ export const service = sqliteTable("Service", {
 	id: text().primaryKey().notNull(),
 	createdById: text().notNull().references(() => user.id, {onDelete: "cascade", onUpdate: "cascade"}),
 	name: text().notNull(),
-	description: text().notNull(),
+	description: text(),
 	docsUrl: text(),
 	apiUrl: text().notNull(),
-	version: integer().notNull(),
 	depreciationTime: integer({mode: "timestamp_ms"}),
 	updateTime: integer({mode: "timestamp_ms"}).notNull(),
+	keyRequired: integer({mode: "boolean"}).notNull(),
 	creationTime: integer({mode: "timestamp_ms"}).notNull(),
 	visibility: integer().$type<Visibility>().notNull()
 });

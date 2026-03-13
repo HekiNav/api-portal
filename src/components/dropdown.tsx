@@ -37,7 +37,7 @@ export default function Dropdown<T extends string | number>(props: DropdownProps
         <div className="relative inline-block text-left" {...otherProps}>
             <button
                 type="button"
-                className={`inline-flex justify-center w-full
+                className={`inline-flex justify-center items-center w-full
                                 border-2 border-blue-800 
                             ${small ? "px-2 py-1" : "px-4 py-2"} bg-white text-sm
                                font-medium text-black hover:bg-blue-800`}

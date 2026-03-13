@@ -19,8 +19,8 @@ export type FormState<E extends readonly string[]> =
     step?: string
   }
 export type FormErrors<E extends readonly string[]> = {
-      [P in E[number]]?: {errors?: string[]}
-    }
+  [P in E[number]]?: { errors?: string[] }
+}
 export type OTPFormState = FormState<["email", "otp", "username", "server"]>
 
 export interface User {
@@ -42,15 +42,16 @@ export interface Session {
 
 export interface Service {
   id: string,
-    createdById: string,
-    name: string,
-    description: string,
-    docsUrl: string|null,
-    apiUrl: string,
-    depreciationTime: Date|null,
-    updateTime: Date,
-    creationTime: Date,
-    visibility: Visibility
+  createdById: string,
+  name: string,
+  description: string | null,
+  docsUrl: string | null,
+  apiUrl: string,
+  depreciationTime: Date | null,
+  keyRequired: boolean,
+  updateTime: Date,
+  creationTime: Date,
+  visibility: Visibility
 }
 export function rib(a: number, b: number) {
   return Math.floor(Math.random() * (b - a) + a)
