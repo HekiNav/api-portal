@@ -9,7 +9,6 @@ export default async function UsersManagePage() {
     if (!services) return (
         <Toast message="Failed to load" type={"error"}></Toast>
     )
-    console.log(services)
 
     return (
         <div className="p-4">

@@ -99,8 +99,8 @@ export default function EditService({ services }: { services: Service[] }) {
                 name: se.name,
                 description: se.description || ""
             }))}></Searchable> : <p>No services</p>}
-            <Modal open={visible} className="bg-white items-start" cardTitle={`Editing ${name || "New service"}`}>
-                <div className="px-4 flex flex-col w-full">
+            <Modal open={visible} className="bg-white items-start w-120! max-h-8/10 overflow-y-scroll" cardTitle={`Editing ${name || "New service"}`}>
+                <div className="px-4 flex flex-col w-full h-full">
                     <span><span className="text-blue-600">*</span> Required</span>
                     <label htmlFor="serviceName">
                         Name<span className="text-blue-600 ml-1">*</span>

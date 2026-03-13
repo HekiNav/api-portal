@@ -11,8 +11,8 @@ export default function NavBar() {
     const [notifications] = useContext(NotificationContext)
 
     const items: { url: string, item: ReactNode }[] = [
+        { url: "/services/", item: "APIs"},
         { url: "https://github.com/HekiNav/api-portal", item: (<span className="flex flex-row items-center">GitHub<OpenInNew className="h-4"/></span>) },
-
     ]
     if (user?.admin) items.splice(items.length - 1, 0, { url: "/manage", item: (<span className="text-blue-600">Manage</span>) })
 
