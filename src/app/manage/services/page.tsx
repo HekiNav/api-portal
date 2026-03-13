@@ -1,7 +1,7 @@
-import Searchable from "@/components/searchable"
+
 import { getServices } from "@/app/actions/service"
 import Toast from "@/components/toast"
-import ServiceCard from "./card"
+
 import EditService from "./edit"
 
 export default async function UsersManagePage() {

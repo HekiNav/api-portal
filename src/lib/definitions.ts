@@ -43,6 +43,7 @@ export interface Session {
 export interface Service {
   id: string,
   createdById: string,
+  createdBy?: User | null,
   name: string,
   description: string | null,
   docsUrl: string | null,

@@ -2,9 +2,9 @@
 import { session, user } from "@/db/schema"
 import { createDB } from "./db"
 import { desc, eq, or } from "drizzle-orm"
-import { User } from "./definitions"
+import { Service, User } from "./definitions"
 
-// public data functions for users
+// public data functions for users and services
 export async function getUser(identifier: string): Promise<User | null> {
     const db = await createDB()
     const data = await db.query.user.findFirst({
@@ -13,4 +13,13 @@ export async function getUser(identifier: string): Promise<User | null> {
     })
     if (!data) return null
     return {...data, lastSeen: data.sessions[0].expiresAt, email: "N/A", sessions: undefined}
+}
+
+export async function getServices(): Promise<Service[] | null> {
+    const db = await createDB()
+    const data = await db.query.service.findMany({
+        with: { createdBy: true }
+    })
+    if (!data) return null
+    return data.map(s => ({...s, createdBy: {...s.createdBy, email: "N/A"}}))
 }
