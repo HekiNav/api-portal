@@ -14,13 +14,8 @@ export default async function UsersManagePage() {
     return (
         <div className="p-4">
             <h1 className="text-2xl font-mono text-blue-800">Manage services</h1>
-            <EditService s={null}>
-                {services.length ? <Searchable items={services.map((s, i) => ({
-                    content: <ServiceCard key={i} s={s}></ServiceCard>,
-                    id: s.id,
-                    name: s.name,
-                    description: s.description || ""
-                }))}></Searchable> : <p>No services</p>}
+            <EditService services={services}>
+                
             </EditService>
         </div>
     )

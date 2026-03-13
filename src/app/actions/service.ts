@@ -27,22 +27,39 @@ export async function deleteService(serviceId: string) {
     }
 }
 
-export async function createService(serviceData: Omit<Service, "createdById" | "updateTime" | "creationTime"|"id">) {
+export async function createService(serviceData: Omit<Service, "createdById" | "updateTime" | "creationTime" | "id">) {
     const user = await getCurrentUser()
     if (!user?.admin) return {
-    success: false,
-    message: "Insufficient authority"
+        success: false,
+        message: "Insufficient authority"
+    }
+    const db = await createDB()
+    await db.insert(service).values({
+        ...serviceData,
+        createdById: user.id,
+        updateTime: new Date(),
+        creationTime: new Date(),
+        id: crypto.randomUUID()
+    })
+    return {
+        success: true,
+        message: "Deleted service"
+    }
 }
-const db = await createDB()
-await db.insert(service).values({
-    ...serviceData,
-    createdById: user.id,
-    updateTime: new Date(),
-    creationTime: new Date(),
-    id: crypto.randomUUID()
-})
-return {
-    success: true,
-    message: "Deleted service"
-}
+
+export async function editService(serviceData: Omit<Service, "updateTime" | "creationTime">) {
+    const user = await getCurrentUser()
+    if (!user?.admin) return {
+        success: false,
+        message: "Insufficient authority"
+    }
+    const db = await createDB()
+    await db.update(service).set({
+        ...serviceData,
+        updateTime: new Date(),
+    }).where(eq(service.id, serviceData.id))
+    return {
+        success: true,
+        message: "Deleted service"
+    }
 }

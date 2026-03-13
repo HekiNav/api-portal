@@ -1,19 +1,22 @@
 "use client"
-import { createService } from "@/app/actions/service"
+import { createService, editService } from "@/app/actions/service"
 import { AreYouSureContext } from "@/components/areyousure"
 import Button from "@/components/button"
 import Dropdown from "@/components/dropdown"
 import IconItem from "@/components/iconitem"
 import Modal from "@/components/modal"
+import Searchable from "@/components/searchable"
 import Toggle from "@/components/toggle"
 import { Visibility } from "@/db/schema"
 import { doServer, FormErrors, Service } from "@/lib/definitions"
 import { Add, ArrowBackIos, ArrowForwardIos, EditCalendar } from "@nine-thirty-five/material-symbols-react/sharp"
 import dayjs from "dayjs"
-import { PropsWithChildren, useContext, useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { useContext, useEffect, useState } from "react"
 import { DatePicker } from "react-datepicker"
 import toast from "react-hot-toast"
 import z from "zod"
+import ServiceCard from "./card"
 
 export const visibilityItems = [
     {
@@ -39,7 +42,20 @@ export const ServiceEditSchema = z.object({
 })
 
 
-export default function EditService({ s, children }: { s: Service | null } & PropsWithChildren) {
+export default function EditService({ services }: { services: Service[] }) {
+
+    const [s, setS] = useState<Service | null>(null)
+
+    useEffect(() => {
+        setName(s?.name || "")
+        setDescription(s?.description || "")
+        setApiUrl(s?.apiUrl || "")
+        setDocsUrl(s?.docsUrl || "")
+        setDepreciation(!!s?.depreciationTime)
+        setKeyRequired(!!s?.depreciationTime || false)
+        setDepreciationTime(s?.depreciationTime)
+        setVisibility(s?.visibility || Visibility.PRIVATE)
+    }, [s])
 
     const [name, setName] = useState(s?.name || "")
     const [description, setDescription] = useState(s?.description || "")
@@ -57,6 +73,7 @@ export default function EditService({ s, children }: { s: Service | null } & Pro
     const [errors, setErrors] = useState<FormErrors<["name", "description", "apiUrl", "docsUrl", "depreciation", "depreciationTime"]>>({})
     const [success, setSuccess] = useState(false)
 
+    const router = useRouter()
 
     useEffect(() => {
         const { success, error } = z.safeParse(ServiceEditSchema, {
@@ -73,7 +90,15 @@ export default function EditService({ s, children }: { s: Service | null } & Pro
     return (
         <>
             <Button onClick={() => setVisible(true)}><IconItem icon={{ Icon: Add, className: "h-4" }}>Create</IconItem></Button>
-            {children}
+            {services.length ? <Searchable items={services.map((se, i) => ({
+                content: <ServiceCard edit={() => {
+                    setS(se)
+                    setVisible(true)
+                }} key={i} s={se}></ServiceCard>,
+                id: se.id,
+                name: se.name,
+                description: se.description || ""
+            }))}></Searchable> : <p>No services</p>}
             <Modal open={visible} className="bg-white items-start" cardTitle={`Editing ${name || "New service"}`}>
                 <div className="px-4 flex flex-col w-full">
                     <span><span className="text-blue-600">*</span> Required</span>
@@ -187,7 +212,7 @@ export default function EditService({ s, children }: { s: Service | null } & Pro
                             cardTitle: "Discard changes?",
                             onConfirm: () => setVisible(false)
                         })}>Cancel</Button>
-                        <Button disabled={!success} onPress={() => toast.promise(doServer(createService({
+                        <Button disabled={!success} onPress={() => !s ? toast.promise(doServer(createService({
                             visibility,
                             name,
                             description: description || null,
@@ -195,7 +220,23 @@ export default function EditService({ s, children }: { s: Service | null } & Pro
                             docsUrl: docsUrl || null,
                             depreciationTime: (depreciation && depreciationTime) || null,
                             keyRequired
-                        })),{loading: "Creating service", success: "Created service!", error: ({message}) => `Could not create service: ${message}`})}>Save</Button>
+                        })), { loading: "Creating service", success: "Created service!", error: ({ message }) => `Could not create service: ${message}` }).then(() => {
+                            router.refresh()
+                            setVisible(false)
+                        }) : toast.promise(doServer(editService({
+                            ...s,
+                            visibility,
+                            name,
+                            description: description || null,
+                            apiUrl,
+                            docsUrl: docsUrl || null,
+                            depreciationTime: (depreciation && depreciationTime) || null,
+                            keyRequired
+                        })), { loading: "Editing service", success: "Edited service!", error: ({ message }) => `Could not edit service: ${message}` }).then(() => {
+                            router.refresh()
+                            setVisible(false)
+                        })
+                        }>Save</Button>
                     </span>
                 </div>
             </Modal>
