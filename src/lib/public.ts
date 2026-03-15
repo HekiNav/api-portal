@@ -1,5 +1,5 @@
 "use server"
-import { session, user } from "@/db/schema"
+import { service, session, user } from "@/db/schema"
 import { createDB } from "./db"
 import { desc, eq, or } from "drizzle-orm"
 import { Service, User } from "./definitions"
@@ -13,6 +13,16 @@ export async function getUser(identifier: string): Promise<User | null> {
     })
     if (!data) return null
     return {...data, lastSeen: data.sessions[0].expiresAt, email: "N/A", sessions: undefined}
+}
+
+export async function getService(id: string): Promise<Service | null> {
+    const db = await createDB()
+    const data = await db.query.service.findFirst({
+        where: eq(service.id, id),
+        with: {createdBy: true}
+    })
+    if (!data) return null
+    return {...data, createdBy: {...data.createdBy, email: "N/A"}}
 }
 
 export async function getServices(): Promise<Service[] | null> {

@@ -19,27 +19,18 @@ export default async function ServicesPage() {
     return (
         <div className="flex p-4 gap-2 flex flex-row flex-wrap">
             {...services.map((s, i) => (
-                <Link href={`/app/new${s.id}`}  key={i}>
+                <Link href={`/service/${s.id}`}  key={i}>
                     <Card className="items-start" cardTitle={<span className="flex justify-between">{s.name} <Link href={`/user/${s.createdById}`}><IconItem icon={{ Icon: Person }}>{s.createdBy?.name}</IconItem></Link></span>}>
-                        <div className="attributes flex flex-wrap gap-2">
-                            <span className="mx-2 p-1 bg-blue-400" hidden={!s.depreciationTime}>This Service is depreciated - Support ends on {dayjs(s.depreciationTime).format("DD.M.YYYY")}</span>
-                            <span className="mx-2 p-1 bg-blue-400">{s.keyRequired ? "Key required" : "Open - no keys"}</span>
+                        <div className="attributes flex flex-wrap gap-2 mx-2">
+                            <span className="p-1 bg-blue-400" hidden={!s.depreciationTime}>Depreciated</span>
+                            <span className="p-1 bg-blue-400">{s.keyRequired ? "Key required" : "Open - no keys"}</span>
                         </div>
                         <span className="px-2 mb-2">
-                            Created {dayjs(s.creationTime).fromNow()} &middot; Edited {dayjs(s.updateTime).fromNow()}
+                            Edited {dayjs(s.updateTime).fromNow()}
                         </span>
-                        <span className="px-2 text-lg  border-t-2 w-full border-blue-800 pt-2">Description</span>
                         <span className="px-2">
                             {s.description}
                         </span>
-                        <span className="px-2 text-lg">Docs</span>
-                        <Link href={s.docsUrl || ""} className="px-2 text-blue-600">
-                            {s.docsUrl}
-                        </Link>
-                        <span className="px-2 text-lg">API Endpoint</span>
-                        <Link href={s.apiUrl || ""} className="px-2 text-blue-600">
-                            {s.apiUrl}
-                        </Link>
                     </Card>
                 </Link>
             ))}
