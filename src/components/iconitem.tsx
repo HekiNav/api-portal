@@ -7,7 +7,6 @@ export interface IconItemProps extends React.PropsWithChildren {
 }
 export default function IconItem({children, icon, reversed = false}: IconItemProps) {
     const {Icon, ...props} = icon
-    console.log(props.className)
     return (
         <div className={`flex ${reversed ? "flex-row-reverse" : "flex-row"} items-center`}>
             <span {...props}><Icon {...props}/></span>

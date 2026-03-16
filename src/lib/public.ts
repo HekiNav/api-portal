@@ -1,5 +1,5 @@
 "use server"
-import { service, session, user, Visibility } from "@/db/schema"
+import { service, session, user } from "@/db/schema"
 import { createDB } from "./db"
 import { desc, eq, or } from "drizzle-orm"
 import { Service, User } from "./definitions"

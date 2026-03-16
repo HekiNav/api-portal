@@ -61,13 +61,14 @@ export interface Application {
   createdById: string,
   createdBy?: User,
   name: string,
+  services?: ApplicationService[]
 }
 
 export interface ApplicationService {
   applicationId: string,
-  application: Application,
+  application?: Application,
   serviceId: string,
-  service: Service,
+  service?: Service,
 }
 
 export function rib(a: number, b: number) {

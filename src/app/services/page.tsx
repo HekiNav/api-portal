@@ -16,7 +16,7 @@ export default async function ServicesPage() {
     return (
         <div className="flex p-4 gap-2 flex flex-row flex-wrap">
             {...services.map((s, i) => (
-                <Card className="items-start" cardTitle={<span className="flex justify-between"><Link href={`/services/${s.id}`}>{s.name}</Link> <Link href={`/user/${s.createdById}`}><IconItem icon={{ Icon: Person }}>{s.createdBy?.name}</IconItem></Link></span>}>
+                <Card key={i} className="items-start" cardTitle={<span className="flex justify-between"><Link href={`/services/${s.id}`}>{s.name}</Link> <Link href={`/user/${s.createdById}`}><IconItem icon={{ Icon: Person }}>{s.createdBy?.name}</IconItem></Link></span>}>
                     <Link href={`/services/${s.id}`} className="items-start flex flex-col">
                         <div className="attributes flex flex-wrap gap-2 mx-2">
                             <span className="p-1 bg-blue-400" hidden={!s.depreciationTime}>Depreciated</span>
