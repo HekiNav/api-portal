@@ -32,6 +32,7 @@ export interface User {
   email: string
   createdAt: Date
   sessions?: Session[],
+  applications?: Application[],
 }
 
 export interface Session {
@@ -54,6 +55,21 @@ export interface Service {
   creationTime: Date,
   visibility: Visibility
 }
+
+export interface Application {
+  id: string,
+  createdById: string,
+  createdBy?: User,
+  name: string,
+}
+
+export interface ApplicationService {
+  applicationId: string,
+  application: Application,
+  serviceId: string,
+  service: Service,
+}
+
 export function rib(a: number, b: number) {
   return Math.floor(Math.random() * (b - a) + a)
 }
