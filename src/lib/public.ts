@@ -1,5 +1,5 @@
 "use server"
-import { service, session, user } from "@/db/schema"
+import { service, session, user, Visibility } from "@/db/schema"
 import { createDB } from "./db"
 import { desc, eq, or } from "drizzle-orm"
 import { Service, User } from "./definitions"
@@ -28,6 +28,7 @@ export async function getService(id: string): Promise<Service | null> {
 export async function getServices(): Promise<Service[] | null> {
     const db = await createDB()
     const data = await db.query.service.findMany({
+        where: eq(service.visibility, 2),
         with: { createdBy: true }
     })
     if (!data) return null

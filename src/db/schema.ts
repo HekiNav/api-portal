@@ -64,10 +64,42 @@ export const service = sqliteTable("Service", {
 	visibility: integer().$type<Visibility>().notNull()
 });
 
+export const application = sqliteTable("Application", {
+	id: text().primaryKey().notNull(),
+	createdById: text().notNull().references(() => user.id, {onDelete: "cascade", onUpdate: "cascade"}),
+	name: text().notNull(),
+});
+
+export const applicationService = sqliteTable("ApplicationService", {
+	applicationId: text().notNull(),
+	serviceId: text().notNull(),
+});
+
 export const serviceRelations = relations(service, ({ one }) => ({
 	createdBy: one(user, {
 		fields: [service.createdById],
 		references: [user.id]
+	})
+}));
+
+export const applicationRelations = relations(application, ({ many, one }) => ({
+	createdBy: one(user, {
+		fields: [application.createdById],
+		references: [user.id]
+	}),
+	services: many(applicationService, {
+		relationName: "service"
+	})
+}));
+
+export const applicationServiceRelations = relations(applicationService, ({ one }) => ({
+	service: one(service, {
+		fields: [applicationService.serviceId],
+		references: [service.id]
+	}),
+	applications: one(application, {
+		fields: [applicationService.applicationId],
+		references: [application.id]
 	})
 }));
 
@@ -91,4 +123,5 @@ export const sessionRelations = relations(session, ({ one }) => ({
 
 export const userRelations = relations(user, ({ many }) => ({
 	sessions: many(session),
+	applications: many(application)
 }));

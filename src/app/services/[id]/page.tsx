@@ -1,5 +1,6 @@
 "use server"
 
+import Button from "@/components/button"
 import Card from "@/components/card"
 import IconItem from "@/components/iconitem"
 import Toast from "@/components/toast"
@@ -21,8 +22,8 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
         <Toast message="Could not get service" type="error"></Toast>
     </div>
     return (
-        <div className="flex p-4 gap-2 flex flex-row flex-wrap">
-            <Card className="items-start" cardTitle={<span className="flex justify-between">{s.name} <Link href={`/user/${s.createdById}`}><IconItem icon={{ Icon: Person }}>{s.createdBy?.name}</IconItem></Link></span>}>
+        <div className="flex p-4 gap-2 flex mt-20 w-full h-full justify-center">
+            <Card className="items-start w-200! h-min" cardTitle={<span className="flex justify-between">{s.name} <Link href={`/user/${s.createdById}`}><IconItem icon={{ Icon: Person }}>{s.createdBy?.name}</IconItem></Link></span>}>
                 <div className="mx-2 attributes flex flex-wrap gap-2">
                     <span className="p-1 bg-blue-400" hidden={!s.depreciationTime}>This Service is depreciated - Support ends on {dayjs(s.depreciationTime).format("DD.M.YYYY")}</span>
                     <span className="p-1 bg-blue-400">{s.keyRequired ? "Key required" : "Open - no keys required"}</span>
@@ -41,6 +42,9 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
                 <span className="px-2 text-lg">API Endpoint</span>
                 <Link href={s.apiUrl || ""} className="px-2 text-blue-600">
                     {s.apiUrl}
+                </Link>
+                <Link href={`/applications?create&sid=${s.id}`} className="px-2 mt-2">
+                    <Button>Create a key</Button>
                 </Link>
             </Card>
         </div>
