@@ -1,12 +1,12 @@
 "use client"
-import { deleteService } from "@/app/actions/service";
 import { AreYouSureContext } from "@/components/areyousure";
 import Button from "@/components/button";
 import Card from "@/components/card";
-import { Application, doServer, Service } from "@/lib/definitions";
+import { Application, doServer } from "@/lib/definitions";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import toast from "react-hot-toast";
+import { deleteApplication } from "../actions/application";
 
 export default function ApplicationCard({ a, edit }: { a: Application, edit: () => void }) {
     const openConfirmation = useContext(AreYouSureContext)
@@ -18,7 +18,7 @@ export default function ApplicationCard({ a, edit }: { a: Application, edit: () 
                 body: `Are you sure you want to PERMANENTLY delete application ${a.name}. This will delete all keys using it.`,
                 onConfirm: () =>
                     toast.promise(() =>
-                        doServer(deleteService(a.id)),
+                        doServer(deleteApplication(a.id)),
                         { loading: "Deleting application", error: ({message}) => `Failed to delete application: ${message}`, success: "Deleted application" }
                     ).then(() => router.refresh())
             }
