@@ -88,20 +88,19 @@ export const applicationRelations = relations(application, ({ many, one }) => ({
 		references: [user.id]
 	}),
 	services: many(applicationService, {
-		relationName: "service"
+		relationName: "servicesForApp"
 	})
 }));
 
 export const applicationServiceRelations = relations(applicationService, ({ one }) => ({
 	service: one(service, {
 		fields: [applicationService.serviceId],
-		references: [service.id],
-		relationName: "service"
+		references: [service.id]
 	}),
 	applications: one(application, {
 		fields: [applicationService.applicationId],
 		references: [application.id],
-		relationName: "application"
+		relationName: "servicesForApp"
 	})
 }));
 

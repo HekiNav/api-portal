@@ -12,7 +12,6 @@ export async function getCurrentUser({applications} = {applications: true}): Pro
   const sessionData = await db.query.session.findFirst({
     where: and(eq(session.id, sessionId), gt(session.expiresAt, new Date())), with: { user: { with: {applications: (applications ? {with: {services: {with: {service: true}}}} : undefined)}} },
   })
-
   if (sessionData?.user.state == UserState.BANNED) return null
 
   return sessionData?.user ? {...sessionData.user, lastSeen: sessionData.expiresAt} : null

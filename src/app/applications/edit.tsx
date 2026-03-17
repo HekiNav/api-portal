@@ -58,7 +58,6 @@ export default function EditApplication({ applications, service, serviceList }: 
 
     useEffect(() => {
         setName(a?.name || "")
-        console.log(a?.services?.flatMap(s => s.service), a)
         setServices(a?.services?.flatMap(s => s.service || []) || (service ? [service] : []))
     }, [a, service])
 

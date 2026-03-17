@@ -26,11 +26,18 @@ export async function createApplication(appData: {name: string, services: {id: s
         message: "Insufficient authority"
     }
     const db = await createDB()
+    const appId = crypto.randomUUID()
     await db.insert(application).values({
         ...appData,
         createdById: user.id,
-        id: crypto.randomUUID()
+        id: appId
     })
+    if (appData.services.length > 0) db.batch(
+        appData.services.map(s => db.insert(applicationService).values({
+            applicationId: appId,
+            serviceId: s.id
+        })) as unknown as [BatchItem<"sqlite">, ...BatchItem<"sqlite">[]]
+    )
     return {
         success: true,
         message: "Created service"
@@ -65,7 +72,7 @@ export async function editApplication(appData: {name: string, id: string, servic
 
     previousAppData.services.forEach(s => {
         if (appData.services.some(service => objectMatch(s, service))) return 
-        else {
+        else if (!appData.services.some(service => service.id == s.serviceId)) {
             batch.push(db.delete(applicationService).where(
                 and(
                     eq(applicationService.applicationId, appData.id),
