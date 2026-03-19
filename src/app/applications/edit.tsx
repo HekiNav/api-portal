@@ -13,6 +13,7 @@ import z, { string } from "zod"
 import ApplicationCard from "./card"
 import Card from "@/components/card"
 import { createApplication, editApplication } from "../actions/application"
+import CopyItem from "@/components/copy"
 
 export const ApplicationEditSchema = z.object({
     name: z.string().min(2).max(50),
@@ -35,6 +36,8 @@ export default function EditApplication({ applications, service, serviceList }: 
     const [visible, setVisible] = useState(!!service)
 
     const [addMenuVisible, setAddmenuVisible] = useState(false)
+
+    const [token, setToken] = useState<string | null>("hk.eyjWrxf1gUYDfwR6GS772B39w9dFqFofmd")
 
     const openAreYouSure = useContext(AreYouSureContext)
 
@@ -114,9 +117,9 @@ export default function EditApplication({ applications, service, serviceList }: 
                                 name,
                                 services
                             })
-                        ), { loading: "Creating application", success: "Created application!", error: ({ message }) => `Could not create application: ${message}` }).then(() => {
+                        ), { loading: "Creating application", success: "Created application!", error: ({ message }) => `Could not create application: ${message}` }).then(({ message }: any) => {
                             router.replace("/applications")
-
+                            setToken(message)
                             setVisible(false)
                         }) : toast.promise(doServer(
                             editApplication({
@@ -132,7 +135,7 @@ export default function EditApplication({ applications, service, serviceList }: 
                     </span>
                 </div>
             </Modal>
-            <Modal small className="z-2000! bg-white gap-2" cardTitle="Add services" open={addMenuVisible} close={() => setAddmenuVisible(false)}>
+            <Modal closeButton small className="z-2000! bg-white gap-2" cardTitle="Add services" open={addMenuVisible} close={() => setAddmenuVisible(false)}>
                 {...serviceList.filter(s => !services.some(se => se.id == s.id)).map((s, i) => (
                     <div key={i} className="px-2 w-full">
                         <div className="items-start w-full p-1 border-2 border-blue-800">
@@ -148,6 +151,10 @@ export default function EditApplication({ applications, service, serviceList }: 
                         </div>
                     </div>
                 ))}
+            </Modal>
+            <Modal closeButton small className="z-3000! w-120! bg-white" cardTitle="Your token" open={!!token} close={() => setToken(null)}>
+                <h2 className="mt-2">Token for {a?.name}</h2>
+                <CopyItem className="text-lg bg-gray-300 mt-2 pl-1" prefix="" content={token || "Token not loaded"}></CopyItem>
             </Modal>
         </>
     )

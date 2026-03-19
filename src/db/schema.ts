@@ -65,14 +65,15 @@ export const service = sqliteTable("Service", {
 });
 
 export const application = sqliteTable("Application", {
+	tokenHash: text().notNull(),
 	id: text().primaryKey().notNull(),
 	createdById: text().notNull().references(() => user.id, {onDelete: "cascade", onUpdate: "cascade"}),
 	name: text().notNull(),
 });
 
 export const applicationService = sqliteTable("ApplicationService", {
-	applicationId: text().notNull(),
-	serviceId: text().notNull(),
+	applicationId: text().notNull().references(() => application.id, {onDelete: "cascade", onUpdate: "cascade"}),
+	serviceId: text().notNull().references(() => service.id, {onDelete: "cascade", onUpdate: "cascade"}),
 });
 
 export const serviceRelations = relations(service, ({ one }) => ({

@@ -3,8 +3,10 @@ import { application, applicationService } from "@/db/schema"
 import { getCurrentUser, userAdmin } from "@/lib/auth"
 import { createDB } from "@/lib/db"
 import { objectMatch } from "@/lib/definitions"
+import { createToken } from "@/lib/token"
 import { and, eq } from "drizzle-orm"
 import { BatchItem } from "drizzle-orm/batch"
+import bcrypt from "bcrypt"
 
 export async function deleteApplication(appId: string) {
     if (!await userAdmin()) return {
@@ -27,10 +29,14 @@ export async function createApplication(appData: {name: string, services: {id: s
     }
     const db = await createDB()
     const appId = crypto.randomUUID()
+
+    const {hash, token} = await createToken()
+
     await db.insert(application).values({
         ...appData,
+        tokenHash: hash,
         createdById: user.id,
-        id: appId
+        id: appId,
     })
     if (appData.services.length > 0) db.batch(
         appData.services.map(s => db.insert(applicationService).values({
@@ -40,7 +46,7 @@ export async function createApplication(appData: {name: string, services: {id: s
     )
     return {
         success: true,
-        message: "Created service"
+        message: token
     }
 }
 
