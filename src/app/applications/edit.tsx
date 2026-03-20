@@ -37,7 +37,7 @@ export default function EditApplication({ applications, service, serviceList }: 
 
     const [addMenuVisible, setAddmenuVisible] = useState(false)
 
-    const [token, setToken] = useState<string | null>("hk.eyjWrxf1gUYDfwR6GS772B39w9dFqFofmd")
+    const [token, setToken] = useState<string | null>(null)
 
     const openAreYouSure = useContext(AreYouSureContext)
 
@@ -71,7 +71,10 @@ export default function EditApplication({ applications, service, serviceList }: 
                 content: <ApplicationCard edit={() => {
                     setA(app)
                     setVisible(true)
-                }} key={i} a={app}></ApplicationCard>,
+                }} key={i} a={app} regenToken={(token, a) => {
+                    setToken(token)
+                    setA(a)
+                }}></ApplicationCard>,
                 id: app.id,
                 name: app.name,
             }))}></Searchable> : <p>No applications</p>}
@@ -153,7 +156,9 @@ export default function EditApplication({ applications, service, serviceList }: 
                 ))}
             </Modal>
             <Modal closeButton small className="z-3000! w-120! bg-white" cardTitle="Your token" open={!!token} close={() => setToken(null)}>
-                <h2 className="mt-2">Token for {a?.name}</h2>
+                <h2 className="mt-2 text-blue-800 text-lg">Token for {a?.name}</h2>
+                <h2 className="mt-2">This token can only be viewed once! Please store it safely.</h2>
+                <h2 className="mt-2">If you lose the token, it can be regenerated.</h2>
                 <CopyItem className="text-lg bg-gray-300 mt-2 pl-1" prefix="" content={token || "Token not loaded"}></CopyItem>
             </Modal>
         </>

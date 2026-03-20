@@ -12,6 +12,10 @@ export default async function ApplicationsPage({
 }) {
     const user = await getCurrentUser({ applications: true })
 
+    if (!user) return (
+        <Toast message="Log in to view your apps" type={"error"} redirectUrl="/login?to=/applications"></Toast>
+    )
+
     const { create, sid } = await searchParams
 
     const services = await getServices()
