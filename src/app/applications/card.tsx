@@ -21,6 +21,7 @@ export default function ApplicationCard({ a, edit, regenToken }: { a: Applicatio
                     toast.promise(() =>
                         doServer(regenerateToken(a.id)),
                         { loading: "Regenerating application token", error: ({message}) => `Failed to regenerate token: ${message}`, success: "Regenerated application token" }
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     ).then(({message}: any) => {
                         regenToken(message, a)
                     })

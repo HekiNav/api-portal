@@ -1,12 +1,11 @@
 "use server"
 import { application, applicationService } from "@/db/schema"
-import { getCurrentUser, userAdmin } from "@/lib/auth"
+import { getCurrentUser } from "@/lib/auth"
 import { createDB } from "@/lib/db"
 import { objectMatch } from "@/lib/definitions"
 import { createToken } from "@/lib/token"
 import { and, eq } from "drizzle-orm"
 import { BatchItem } from "drizzle-orm/batch"
-import bcrypt from "bcrypt"
 
 export async function deleteApplication(appId: string) {
     const db = await createDB()
@@ -26,11 +25,12 @@ export async function createApplication(appData: { name: string, services: { id:
     const db = await createDB()
     const appId = crypto.randomUUID()
 
-    const { hash, token } = await createToken()
+    const { hash, token, prefix } = await createToken()
 
     await db.insert(application).values({
         ...appData,
         tokenHash: hash,
+        tokenPrefix: prefix,
         createdById: user.id,
         id: appId,
     })
@@ -125,10 +125,11 @@ export async function regenerateToken(appId: string): Promise<{ success: boolean
         message: "Insufficient authority"
     }
 
-    const { hash, token } = await createToken()
+    const { hash, token, prefix } = await createToken()
 
     await db.update(application).set({
-        tokenHash: hash
+        tokenHash: hash,
+        tokenPrefix: prefix
     }).where(eq(application.id, appData.id))
 
     return {

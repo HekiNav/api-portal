@@ -3,6 +3,7 @@ import { deleteService } from "@/app/actions/service";
 import { AreYouSureContext } from "@/components/areyousure";
 import Button from "@/components/button";
 import Card from "@/components/card";
+import CopyItem from "@/components/copy";
 import { doServer, Service } from "@/lib/definitions";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
@@ -12,7 +13,8 @@ export default function ServiceCard({ s, edit }: { s: Service, edit: () => void 
     const openConfirmation = useContext(AreYouSureContext)
     const router = useRouter()
     return (
-        <Card small className="w-50! gap-2" cardTitle={s.name}>
+        <Card small className="w-60! gap-2" cardTitle={s.name}>
+            <CopyItem className="w-full px-1" content={s.id} prefix="ID: "></CopyItem>
             <span className="px-2">
                 {s.description}
             </span>

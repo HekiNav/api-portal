@@ -66,6 +66,7 @@ export const service = sqliteTable("Service", {
 
 export const application = sqliteTable("Application", {
 	tokenHash: text().notNull(),
+	tokenPrefix: text().notNull(),
 	id: text().primaryKey().notNull(),
 	createdById: text().notNull().references(() => user.id, {onDelete: "cascade", onUpdate: "cascade"}),
 	name: text().notNull(),

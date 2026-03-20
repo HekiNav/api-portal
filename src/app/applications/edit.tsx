@@ -120,6 +120,7 @@ export default function EditApplication({ applications, service, serviceList }: 
                                 name,
                                 services
                             })
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         ), { loading: "Creating application", success: "Created application!", error: ({ message }) => `Could not create application: ${message}` }).then(({ message }: any) => {
                             router.replace("/applications")
                             setToken(message)

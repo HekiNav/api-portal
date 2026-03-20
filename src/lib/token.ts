@@ -1,18 +1,20 @@
 import bcrypt from "bcrypt"
 
 export async function createToken() {
-    const token = generateToken(32)
+    const prefix = generateToken(8)
+    const token = `hk.ey${prefix}-${generateToken(16)}`
     const hash = await bcrypt.hash(token, 10)
     return {
         token,
-        hash
+        hash,
+        prefix
     }
 }
 
 export function generateToken(n: number): string {
-    var chars = 'bcdfgjlmopqrstuwxyzBCDFGJLMOPQRSTUWXYZ0123456789';
-    var token = 'hk.ey';
-    for(var i = 0; i < n; i++) {
+    const chars = 'bcdfgjlmopqrstuwxzBCDFGJLMOPQRSTUWXZ0123456789';
+    let token = '';
+    for(let i = 0; i < n; i++) {
         token += chars[Math.floor(Math.random() * chars.length)];
     }
     return token;
