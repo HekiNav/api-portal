@@ -85,7 +85,7 @@ export default function EditService({ services }: { services: Service[] }) {
         })
         setSuccess(success)
         setErrors(error ? z.treeifyError(error).properties || {} : {})
-    }, [name, description, apiUrl, docsUrl, apiUrl, depreciation, depreciationTime])
+    }, [name, description, apiUrl, docsUrl, depreciation, depreciationTime])
 
     return (
         <>

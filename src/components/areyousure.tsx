@@ -23,12 +23,18 @@ export default function AreYouSure({ children }: PropsWithChildren) {
         <>
             <AreYouSureContext value={openAreYouSure}>
                 {children}
-                <Modal className="are-you-sure bg-white w-60!" open={visible} close={() => {data?.onCancel && data.onCancel(); setVisible(false)}} cardTitle={data?.cardTitle}>
+                <Modal className="are-you-sure bg-white w-60!" open={visible} close={() => { if (data?.onCancel) data.onCancel(); setVisible(false) }} cardTitle={data?.cardTitle}>
                     <div className="px-2">
                         {data?.body}
                         <div className="w-full flex gap-4 items-center">
-                            <Button onClick={() => {data?.onCancel && data.onCancel(); setVisible(false)}}>Cancel</Button>
-                            <Button onClick={() => {data?.onConfirm && data.onConfirm(); setVisible(false)}}>Confirm</Button>
+                            <Button onClick={() => {
+                                if (data?.onCancel) data.onCancel();
+                                setVisible(false)
+                            }}>Cancel</Button>
+                            <Button onClick={() => { 
+                                if (data?.onConfirm) data.onConfirm(); 
+                                setVisible(false) 
+                                }}>Confirm</Button>
                         </div>
                     </div>
                 </Modal>

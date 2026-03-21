@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt"
+import * as bcrypt from "bcrypt-ts"
 
 export async function createToken() {
     const prefix = generateToken(8)

@@ -18,7 +18,7 @@
 		"@nine-thirty-five/material-symbols-react": "^1.26.1",
 		"@opennextjs/cloudflare": "^1.14.8",
 		"@types/geojson": "^7946.0.16",
-		"bcrypt": "^6.0.0",
+		"bcrypt-ts": "^8.0.1",
 		"dayjs": "^1.11.19",
 		"dotenv": "^17.2.3",
 		"drizzle-orm": "^0.45.1",
@@ -37,7 +37,6 @@
 	"devDependencies": {
 		"@eslint/eslintrc": "^3",
 		"@tailwindcss/postcss": "^4",
-		"@types/bcrypt": "^6.0.0",
 		"@types/node": "^20.19.27",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",

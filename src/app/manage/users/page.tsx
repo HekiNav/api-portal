@@ -7,7 +7,7 @@ export default async function UsersManagePage() {
     return (
         <div className="p-4">
             <h1 className="text-2xl font-mono text-blue-800">Manage users</h1>
-            <Searchable items={users.map((u, i) => ({
+            <Searchable items={(users || []).map((u, i) => ({
                 content: <UserCard key={i} u={u}></UserCard>,
                 id: u.id,
                 name: u.name || u.id

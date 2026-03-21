@@ -1,7 +1,7 @@
 import { createDB } from "@/lib/db"
 import { eq } from "drizzle-orm"
 import { NextRequest } from "next/server"
-import bcrypt from "bcrypt"
+import * as bcrypt from "bcrypt-ts"
 import { application, applicationService } from "@/db/schema"
 
 export async function GET(req: NextRequest) {

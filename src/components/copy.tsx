@@ -1,6 +1,6 @@
 "use client"
 import { Check, Close, ContentCopy } from "@nine-thirty-five/material-symbols-react/sharp";
-import { HTMLAttributes, JSX, useState } from "react";
+import { HTMLAttributes, useState } from "react";
 import { toast } from "react-hot-toast";
 
 type IconKey = "copy" | "check" | "close";

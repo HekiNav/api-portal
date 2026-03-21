@@ -47,7 +47,7 @@ export default function Login() {
 
   useEffect(() => {
     if (errors?.server) {
-      errors.server.forEach(err => toast.error(err))
+      errors.server.errors?.forEach(err => toast.error(err))
     }
   }, [errors])
 
@@ -68,7 +68,7 @@ export default function Login() {
               className="my-1 border-black border-3 p-1 accent-blue-800"
               onKeyDown={(e) => e.key == "Enter" && startTransition(() => action({ type: "send", email: email }))}
             />
-            <div className="text-red-600">{errors?.email?.join(", ")}</div>
+            <div className="text-red-600">{errors?.email?.errors?.join(", ")}</div>
             <small className="text-gray-600 mb-4">Other login methods coming soon</small>
             <Button
               disabled={pending}
@@ -93,7 +93,7 @@ export default function Login() {
               className="my-2 border-black border-3 p-1 accent-blue-800"
               onKeyDown={(e) => e.key == "Enter" && startTransition(() => action({ type: "verify", email: email, otp: otp }))}
             />
-            <div className="text-red-600">{errors?.otp?.join(", ")}</div>
+            <div className="text-red-600">{errors?.otp?.errors?.join(", ")}</div>
             <Button
               disabled={pending}
               autoFocus
@@ -116,7 +116,7 @@ export default function Login() {
               disabled={pending}
               className="my-2 border-black border-3 p-1 accent-blue-800"
             />
-            <div className="text-red-600">{errors?.username?.join(", ")}</div>
+            <div className="text-red-600">{errors?.username?.errors?.join(", ")}</div>
             <Button
               disabled={pending}
               autoFocus
