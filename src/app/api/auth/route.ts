@@ -6,6 +6,8 @@ import { application, applicationService } from "@/db/schema"
 
 export async function GET(req: NextRequest) {
 
+    console.time("")
+
     const params = req.nextUrl.searchParams
 
     const sid = params.get("sid")
@@ -15,8 +17,11 @@ export async function GET(req: NextRequest) {
 
     if (!token || !prefix || !sid || typeof token != "string" || typeof sid != "string") return Response.json(invalidMessage, { status: 400, statusText: "Bad Request" })
 
+    console.timeLog("", "checked request")
+    
     const db = await createDB()
 
+    console.timeLog("", "created db")
 
     const app = await db.query.application.findFirst({
         where: eq(application.tokenPrefix, prefix),
@@ -27,9 +32,15 @@ export async function GET(req: NextRequest) {
         }
     })
 
+    console.timeLog("", "got app data")
+
+
     if (!app || !app.services.some(a => a.serviceId == sid)) return Response.json({success: false, message: "Failed to find service/token match"}, { status: 400, statusText: "Bad Request" })
+    console.timeLog("", "validated app data")
 
     if (!await bcrypt.compare(token, app?.tokenHash || "")) return Response.json({success: false, message: "Invalid or expired token"}, { status: 400, statusText: "Bad Request" })
+
+    console.timeEnd("")
 
     return Response.json({
         success: true,

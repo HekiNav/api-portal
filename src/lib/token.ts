@@ -3,7 +3,7 @@ import * as bcrypt from "bcrypt-ts"
 export async function createToken() {
     const prefix = generateToken(8)
     const token = `hk.ey${prefix}-${generateToken(16)}`
-    const hash = await bcrypt.hash(token, 10)
+    const hash = await bcrypt.hash(token, 2)
     return {
         token,
         hash,
