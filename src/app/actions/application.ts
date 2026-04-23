@@ -18,10 +18,11 @@ export async function deleteApplication(appId: string) {
 
 export async function createApplication(appData: { name: string, services: { id: string }[] }) {
     const user = await getCurrentUser()
-    if (!user?.admin) return {
+    if (!user) return {
         success: false,
-        message: "Insufficient authority"
+        message: "Error finding user"
     }
+
     const db = await createDB()
     const appId = crypto.randomUUID()
 
@@ -48,10 +49,7 @@ export async function createApplication(appData: { name: string, services: { id:
 
 export async function editApplication(appData: { name: string, id: string, services: { id: string }[] }): Promise<{ success: boolean; message: string; }> {
     const user = await getCurrentUser()
-    if (!user?.admin) return {
-        success: false,
-        message: "Insufficient authority"
-    }
+
     const db = await createDB()
 
     const previousAppData = await db.query.application.findFirst({
